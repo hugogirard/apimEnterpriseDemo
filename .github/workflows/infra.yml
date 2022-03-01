@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      AZURE_WEBAPP_PACKAGE_PATH: '.src/WeatherApi'
+      AZURE_WEBAPP_PACKAGE_PATH: 'src/WeatherApi'
       DOTNET_VERSION: '6.0.x'
 
     steps:
