@@ -40,5 +40,5 @@ jobs:
         with:
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: ./bicep/main.json
+          template: ./bicep/main.bicep
           parameters: location=${{ env.LOCATION }} publisherEmail=${{ secrets.PUBLISHER_EMAIL }} publisherName=${{ env.PUBLISHER_NAME }}
