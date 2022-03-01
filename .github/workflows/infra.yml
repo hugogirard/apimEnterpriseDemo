@@ -1,0 +1,44 @@
+name: Create Azure Resouces
+
+on:
+  push:
+    branches:
+      - main
+
+      paths:
+        - bicep/**
+        - .github/workflows/infra.yml
+  workflow_dispatch:
+    
+jobs:
+  
+  create-azure-resources:
+
+    env:
+      LOCATION: eastus
+      RESOURCE_GROUP_NAME: rg-apim-mock-demo
+      PUBLISHER_NAME: contoso
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create Resource Group
+        run: |
+          az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.LOCATION }}
+
+      - name: Deploy Azure Resources
+        id: armDeployment
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: ./bicep/main.json
+          parameters: location=${{ env.LOCATION }} publisherEmail=${{ secrets.PUBLISHER_EMAIL }} publisherName=${{ env.PUBLISHER_NAME }}
