@@ -27,3 +27,13 @@ module appplan 'modules/web/appserviceplan.bicep' = {
   }
 }
 
+module webapp 'modules/web/webapp.bicep' = {
+  name: 'webapp'
+  params: {
+    appServicePlanId: appplan.outputs.appServiceId
+    location: location
+    suffix: suffix
+  }
+}
+
+output webappName string = webapp.outputs.webappName

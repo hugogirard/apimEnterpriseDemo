@@ -7,8 +7,19 @@ resource webapp 'Microsoft.Web/sites@2021-03-01' = {
   location: location
   properties: {
     serverFarmId: appServicePlanId
+    clientAffinityEnabled: false
     siteConfig: {
-      netFrameworkVersion: 'v6.0'      
+      netFrameworkVersion: 'v6.0'
+      metadata: [
+        {
+          name: 'CURRENT_STACK'
+          value: 'dotnet'
+        }
+      ]
+      phpVersion: 'OFF'
+      alwaysOn: true
     }
   }
 }
+
+output webappName string = webapp.name
