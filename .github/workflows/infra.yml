@@ -5,9 +5,9 @@ on:
     branches:
       - main
 
-      paths:
-        - bicep/**
-        - .github/workflows/infra.yml
+    paths:
+      - bicep/**
+      - .github/workflows/infra.yml
   workflow_dispatch:
     
 jobs:
