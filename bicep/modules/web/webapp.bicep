@@ -10,12 +10,6 @@ resource webapp 'Microsoft.Web/sites@2021-03-01' = {
     clientAffinityEnabled: false
     siteConfig: {
       netFrameworkVersion: 'v6.0'
-      metadata: [
-        {
-          name: 'CURRENT_STACK'
-          value: 'dotnet'
-        }
-      ]
       phpVersion: 'OFF'
       alwaysOn: true
     }
