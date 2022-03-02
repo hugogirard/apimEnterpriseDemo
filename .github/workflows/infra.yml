@@ -92,6 +92,9 @@ jobs:
     needs: [create-azure-resources, deploy-web-app]
     runs-on: ubuntu-latest
 
+    env:    
+      RESOURCE_GROUP_NAME: rg-apim-mock-demo
+      
     steps:
 
       - uses: actions/checkout@v2
