@@ -24,6 +24,7 @@ jobs:
     outputs:
       webappName: ${{ steps.armDeployment.outputs.webappName }}
       apimName: ${{ steps.armDeployment.outputs.apimName }}
+      webFQDN: ${{ steps.armDeployment.outputs.webFQDN }}
 
     steps:
 
@@ -111,5 +112,5 @@ jobs:
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./bicep/apim.configuration.bicep
-          parameters: apimName=${{ needs.create-azure-resources.outputs.apimName }}
+          parameters: apimName=${{ needs.create-azure-resources.outputs.apimName }} apiServiceUrl= ${{ needs.create-azure-resources.outputs.webFQDN }}
 
