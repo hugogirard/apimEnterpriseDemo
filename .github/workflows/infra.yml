@@ -23,6 +23,7 @@ jobs:
 
     outputs:
       webappName: ${{ steps.armDeployment.outputs.webappName }}
+      apimName: $${{ steps.armDeployment.outputs.apimName }}
 
     steps:
 
@@ -84,4 +85,28 @@ jobs:
 
       - name: logout
         run: |
-          az logout                  
+          az logout        
+
+  configurate-apim:
+    
+    needs: [create-azure-resources, deploy-web-app]
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.azure_credentials }}
+
+      - name: Deploy Azure Resources
+        id: armDeployment
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: ./bicep/apim.configuration.bicep
+          parameters: apimName=${{ needs.create-azure-resources.outputs.apimName }}
+
