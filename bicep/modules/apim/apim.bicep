@@ -15,3 +15,5 @@ resource apim 'Microsoft.ApiManagement/service@2021-08-01' = {
     publisherName: publisherName
   }
 }
+
+output apimName string = apim.name

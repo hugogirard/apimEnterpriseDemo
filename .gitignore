@@ -10,6 +10,9 @@
 *.userosscache
 *.sln.docstates
 
+# tmpl output
+tmplOutput
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

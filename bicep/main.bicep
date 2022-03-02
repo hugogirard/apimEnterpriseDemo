@@ -36,4 +36,11 @@ module webapp 'modules/web/webapp.bicep' = {
   }
 }
 
+module apimWeatherProduct 'modules/apim/products/weather.bicep' = {
+  name: 'weatherProduct'
+  params: {
+    apimName: apim.outputs.apimName
+  }
+}
+
 output webappName string = webapp.outputs.webappName
