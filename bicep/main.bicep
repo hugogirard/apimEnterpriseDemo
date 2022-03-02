@@ -38,3 +38,4 @@ module webapp 'modules/web/webapp.bicep' = {
 
 output webappName string = webapp.outputs.webappName
 output apimName string = apim.outputs.apimName
+output webFQDN string = webapp.outputs.webFQDN
