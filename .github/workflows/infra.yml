@@ -23,7 +23,7 @@ jobs:
 
     outputs:
       webappName: ${{ steps.armDeployment.outputs.webappName }}
-      apimName: $${{ steps.armDeployment.outputs.apimName }}
+      apimName: ${{ steps.armDeployment.outputs.apimName }}
 
     steps:
 
