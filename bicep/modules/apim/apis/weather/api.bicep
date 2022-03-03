@@ -1,6 +1,8 @@
 param ApimServiceName string
 param apiServiceUrl string
 
+var apiName = 'weather-api'
+
 resource ApimServiceName_weather_api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
   properties: {
     description: 'Weather API'
@@ -20,6 +22,8 @@ resource ApimServiceName_weather_api 'Microsoft.ApiManagement/service/apis@2021-
       'https'
     ]
   }
-  name: '${ApimServiceName}/weather-api'
+  name: '${ApimServiceName}/${apiName}'
   dependsOn: []
 }
+
+output name string = apiName

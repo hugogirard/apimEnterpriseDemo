@@ -15,3 +15,12 @@ module weatherApi 'modules/apim/apis/weather/api.bicep' = {
     apiServiceUrl: apiServiceUrl
   }
 }
+
+module apisProduct 'modules/apim/products/productApi.bicep' = {
+  name: 'apisProduct'
+  params: {
+    apimName: apimName
+    apiName: weatherApi.outputs.name
+    productName: weatherProduct.outputs.productName
+  }
+}

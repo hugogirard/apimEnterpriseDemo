@@ -16,3 +16,5 @@ resource adminGroup 'Microsoft.ApiManagement/service/products/groups@2021-01-01-
   parent: weatherProduct
   name: 'administrators'
 }
+
+output productName string = toLower(weatherProduct.properties.displayName)
