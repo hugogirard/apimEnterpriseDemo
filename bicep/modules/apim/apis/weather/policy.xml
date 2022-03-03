@@ -1,24 +1,7 @@
 <policies>
     <inbound>
         <base />
-        <set-variable name="UseMock" value="@{ 
-            string[] value;
-            if (context.Request.Headers.TryGetValue("UseMock", out value))
-            {   if(value != null && value.Length > 0)
-                {
-                    bool useMock;
-                    if (bool.TryParse(value[0],out useMock)) {
-                        return useMock;
-                    }
-                }
-            }
-            return false;
-        }" />
-        <choose>
-            <when condition="@((bool)context.Variables.GetValueOrDefault<bool>("UseMock"))">
-                <mock-response status-code="200" content-type="application/json" />
-            </when>
-        </choose>
+        <rate-limit-by-key calls="10" renewal-period="60" counter-key="@(context.Subscription?.Key ?? "anonymous")" />
     </inbound>
     <backend>
         <base />

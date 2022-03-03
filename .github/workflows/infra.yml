@@ -95,7 +95,8 @@ jobs:
 
     env:    
       RESOURCE_GROUP_NAME: rg-apim-mock-demo
-      
+      BASE_REPO_URL: 'https://raw.githubusercontent.com/hugogirard/apimMockingBackend/main'  
+
     steps:
 
       - uses: actions/checkout@v2
@@ -112,5 +113,5 @@ jobs:
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./bicep/apim.configuration.bicep
-          parameters: apimName=${{ needs.create-azure-resources.outputs.apimName }} apiServiceUrl=${{ needs.create-azure-resources.outputs.webFQDN }}
+          parameters: apimName=${{ needs.create-azure-resources.outputs.apimName }} apiServiceUrl=${{ needs.create-azure-resources.outputs.webFQDN }} repobaseUrl=${{ env.BASE_REPO_URL }}
 

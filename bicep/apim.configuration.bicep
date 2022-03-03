@@ -1,5 +1,6 @@
 param apimName string
 param apiServiceUrl string
+param repobaseUrl string
 
 module weatherProduct 'modules/apim/products/weather.bicep' = {
   name: 'weatherProduct'
@@ -13,6 +14,7 @@ module weatherApi 'modules/apim/apis/weather/api.bicep' = {
   params: {
     ApimServiceName: apimName
     apiServiceUrl: apiServiceUrl
+    repobaseUrl: repobaseUrl
   }
 }
 
