@@ -13,7 +13,7 @@ resource ApimServiceName_weather_api 'Microsoft.ApiManagement/service/apis@2021-
     subscriptionRequired: true
     displayName: 'Weather API'
     serviceUrl: apiServiceUrl
-    format: 'swagger-link-json'
+    format: 'openapi-link' // If using V3 spec use openapi-link otherwise swagger-link-json  
     value: '${apiServiceUrl}swagger/v1/swagger.json'
     path: 'wth'
     protocols: [
