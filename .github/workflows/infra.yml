@@ -112,5 +112,5 @@ jobs:
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./bicep/apim.configuration.bicep
-          parameters: apimName=${{ needs.create-azure-resources.outputs.apimName }} apiServiceUrl= ${{ needs.create-azure-resources.outputs.webFQDN }}
+          parameters: apimName=${{ needs.create-azure-resources.outputs.apimName }} apiServiceUrl=${{ needs.create-azure-resources.outputs.webFQDN }}
 
