@@ -26,8 +26,46 @@ resource ApimServiceName_weather_api 'Microsoft.ApiManagement/service/apis@2021-
   dependsOn: []
 }
 
+resource ApimServiceName_weather_api_621e8894463461025c0b354f 'Microsoft.ApiManagement/service/apis/schemas@2021-01-01-preview' = {
+  parent: ApimServiceName_weather_api
+  properties: {
+    contentType: 'application/vnd.oai.openapi.components+json'
+    document: {
+      components: {
+        schemas: {
+          City: {
+            type: 'object'
+            properties: {
+              id: {
+                type: 'string'
+                nullable: true
+              }
+              name: {
+                type: 'string'
+                nullable: true
+              }
+            }
+            additionalProperties: false
+          }
+          ApiGetForecastCitiesGet200ApplicationJsonResponse: {
+            type: 'array'
+            items: {
+              '$ref': '#/components/schemas/City'
+            }
+            'x-apim-inline': true
+          }
+        }
+      }
+    }
+  }
+  name: '621e8894463461025c0b354f'
+}
+
 resource ApimServiceName_weather_api_get_api_getforecastcities 'Microsoft.ApiManagement/service/apis/operations@2021-01-01-preview' = {
   parent: ApimServiceName_weather_api
+  dependsOn: [
+    ApimServiceName_weather_api_621e8894463461025c0b354f
+  ]
   properties: {
     templateParameters: []
     request: {
