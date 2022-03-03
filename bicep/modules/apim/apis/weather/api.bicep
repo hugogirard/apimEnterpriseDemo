@@ -26,4 +26,35 @@ resource ApimServiceName_weather_api 'Microsoft.ApiManagement/service/apis@2021-
   dependsOn: []
 }
 
+resource ApimServiceName_weather_api_get_api_getforecastcities 'Microsoft.ApiManagement/service/apis/operations@2021-01-01-preview' = {
+  parent: ApimServiceName_weather_api
+  properties: {
+    templateParameters: []
+    request: {
+      queryParameters: []
+      headers: []
+      representations: []
+    }
+    responses: [
+      {
+        statusCode: 200
+        description: 'Success'
+        headers: []
+        representations: [
+          {
+            contentType: 'application/json'
+            sample: '[\r\n  {\r\n    "id": "583eb25b-d975-46e5-bdb9-4a8c8ad225ed",\r\n    "name": "Boston"\r\n  },\r\n  {\r\n    "id": "8ceb628f-bd24-4cba-8bcd-6b5dc0048899",\r\n    "name": "NYC"\r\n  }\r\n]'
+            schemaId: '621e8894463461025c0b354f'
+            typeName: 'ApiGetForecastCitiesGet200ApplicationJsonResponse'
+          }
+        ]
+      }
+    ]
+    displayName: '/api/getForecastCities - GET'
+    method: 'GET'
+    urlTemplate: '/api/getForecastCities'
+  }
+  name: 'get-api-getforecastcities'
+}
+
 output name string = apiName

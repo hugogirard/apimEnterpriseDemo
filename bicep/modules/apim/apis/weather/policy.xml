@@ -1,0 +1,32 @@
+<policies>
+    <inbound>
+        <base />
+        <set-variable name="UseMock" value="@{ 
+            string[] value;
+            if (context.Request.Headers.TryGetValue("UseMock", out value))
+            {   if(value != null && value.Length > 0)
+                {
+                    bool useMock;
+                    if (bool.TryParse(value[0],out useMock)) {
+                        return useMock;
+                    }
+                }
+            }
+            return false;
+        }" />
+        <choose>
+            <when condition="@((bool)context.Variables.GetValueOrDefault<bool>("UseMock"))">
+                <mock-response status-code="200" content-type="application/json" />
+            </when>
+        </choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
