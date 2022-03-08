@@ -1,0 +1,38 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "ApimServiceName": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "properties": {
+        "description": "Provide all APIs for the weather",
+        "subscriptionRequired": true,
+        "approvalRequired": true,
+        "subscriptionsLimit": 1,
+        "state": "published",
+        "displayName": "WeatherForecast"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/weatherforecast')]",
+      "type": "Microsoft.ApiManagement/service/products",
+      "apiVersion": "2021-01-01-preview"
+    },
+    {
+      "properties": {
+        "description": "Administrators is a built-in group. Its membership is managed by the system. Microsoft Azure subscription administrators fall into this group.",
+        "displayName": "Administrators",
+        "type": "system",
+        "builtIn": true
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/weatherforecast/administrators')]",
+      "type": "Microsoft.ApiManagement/service/products/groups",
+      "apiVersion": "2021-01-01-preview",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/products', parameters('ApimServiceName'), 'weatherforecast')]"
+      ]
+    }
+  ]
+}
