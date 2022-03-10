@@ -26,30 +26,90 @@ public class ApiGatewayService : IApiGatewayService
     }
 
     public async Task CreateUserAsync(string email, string firstname, string lastname, string userId)
-    {        
+    {
         string sasToken = CreateSasToken(DateTime.UtcNow.AddMinutes(15));
         var http = _httpClientFactory.CreateClient();
-        
-        var user = new ApimUser(email,firstname, lastname, userId);
+
+        var user = new ApimUser(email, firstname, lastname, userId);
 
         var userJson = new StringContent(JsonConvert.SerializeObject(user),
                                              Encoding.UTF8,
                                              Application.Json);
 
         http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("SharedAccessSignature", sasToken);
-        string url = $"{BASE_URL}/users/{userId}?api-version=${API_VERSION}";        
+        string url = $"{BASE_URL}/users/{userId}?api-version={API_VERSION}";
 
 
         using var httpResponseMessage = await http.PutAsync(url, userJson);
 
-        if (httpResponseMessage.IsSuccessStatusCode) 
+        if (httpResponseMessage.IsSuccessStatusCode)
         {
             string responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
         }
     }
 
+    public bool ValidateSignature(string sig, string operations, string salt, string returnUrl)
+    {
+        string signature = string.Empty;
 
-    private string CreateSasToken(DateTime expiry) 
+        var encoder = new HMACSHA512(Convert.FromBase64String(_configuration["Apim:DelegationValidationKey"]));
+
+        // For now only sign in is implemented
+        switch (operations)
+        {
+            case "SignIn":
+                signature = Convert.ToBase64String(encoder.ComputeHash(Encoding.UTF8.GetBytes(salt + "\n" + returnUrl)));
+                break;
+            default:
+                break;
+        }
+
+        // Validate if signature match
+        if (signature == sig)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public async Task<string> GetRedirectionUrlAsync(string userId)
+    {
+        var http = _httpClientFactory.CreateClient();
+
+        string sasToken = CreateSasToken(DateTime.UtcNow.AddHours(1));
+        http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("SharedAccessSignature", sasToken);
+       
+        var payload = new DeveloperPortalTokenPayload 
+        { 
+            DeveloperPortalTokenProperties = new DeveloperPortalTokenProperties 
+            { 
+               Expiry = DateTime.UtcNow.AddHours(1).ToString()
+            }    
+        };
+
+        var payloadJson = new StringContent(JsonConvert.SerializeObject(payload),
+                                            Encoding.UTF8,
+                                            Application.Json);
+
+        HttpResponseMessage response = await http.PostAsync($"{BASE_URL}/users/{userId}/generateSsoUrl?api-version={API_VERSION}", payloadJson);
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            var ssoUrlJson = await response.Content.ReadAsStringAsync();
+
+            dynamic sso = JsonConvert.DeserializeObject(ssoUrlJson);
+
+            return sso.value.Replace("portal", "developer");
+        }
+
+        return string.Empty;
+    }
+
+    private string CreateSasToken(DateTime expiry)
     {
         var id = _configuration["Apim:Identifier"];
         var key = _configuration["Apim:Key"];
@@ -62,22 +122,5 @@ public class ApiGatewayService : IApiGatewayService
             string encodedToken = string.Format("uid={0}&ex={1:o}&sn={2}", id, expiry, signature);
             return encodedToken;
         }
-    }
-    
-    private async Task GetBearerTokenAsync()
-    {
-        string url = $"https://login.microsoftonline.com/{_configuration["AzureAD:TenantId"]}/oauth2/token";
-
-        var payload = new[]
-        {
-            new KeyValuePair<string,string>("grant_type", "client_credentials"),
-            new KeyValuePair<string, string>("client_id", _configuration["ServicePrincipal:clientId"]),
-            new KeyValuePair<string, string>("client_secret", _configuration["ServicePrincipal:secret"]),
-            new KeyValuePair<string, string>("resource", "https://management.azure.com/")
-        };
-
-        var http = _httpClientFactory.CreateClient();
-
-        var result = await http.PostAsync(url, new FormUrlEncodedContent(payload));
     }
 }

@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "bin\\Release\\net6.0\\publish",
+    "appService.defaultWebAppToDeploy": "/subscriptions/abd9e36a-555c-4de4-a75d-cfc1682d67b0/resourceGroups/rg-apim-mock-demo/providers/Microsoft.Web/sites/hgidp"
+}
