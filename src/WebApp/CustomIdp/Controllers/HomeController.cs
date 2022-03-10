@@ -10,11 +10,15 @@ namespace CustomIdp.Controllers
         private readonly ILogger<HomeController> _logger;
 
         private readonly IApiGatewayService _apiGatewayService;
+        private readonly IConfiguration _configuration;
 
-        public HomeController(ILogger<HomeController> logger,IApiGatewayService apiGatewayService)
+        public HomeController(ILogger<HomeController> logger,
+                              IApiGatewayService apiGatewayService,
+                              IConfiguration configuration)
         {
             _logger = logger;
             _apiGatewayService = apiGatewayService;
+            _configuration = configuration;
         }
 
         public async Task<IActionResult> Index()
@@ -44,36 +48,29 @@ namespace CustomIdp.Controllers
                                                   [FromQuery(Name = "operation")]string operation)
         {
 
-
             if (operation == "SignOut")
+                return Redirect($"~/Identity/Account/Logout?returnUrl={_configuration["Apim:DevPortal"]}&externalWebsite=true");
+
+            bool isValid = _apiGatewayService.ValidateSignature(sig, operation, salt, returnUrl);
+
+            if (isValid)                                
             {
-                return Redirect($"~/Identity/Account/Logout?returnUrl={returnUrl}");
+                if (User.Identity == null || !User.Identity.IsAuthenticated)
+                {                    
+                    return Redirect($"~/Identity/Account/Login?returnUrl=~/Home/RedirectToDevPortal");
+                }
+
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                string redirectUrl = await _apiGatewayService.GetRedirectionUrlAsync(userId);
+
+                return Redirect(redirectUrl);
             }
-            else 
+            else
             {
-                bool isValid = _apiGatewayService.ValidateSignature(sig, operation, salt, returnUrl);
-
-                if (isValid)
-                {
-                    if (User.Identity == null || !User.Identity.IsAuthenticated)
-                    {
-                        ViewBag.RedirectToApiMDevPortal = true;
-                        return Redirect($"~/Identity/Account/Login?returnUrl=~/Home/RedirectToDevPortal");
-                    }
-
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    string redirectUrl = await _apiGatewayService.GetRedirectionUrlAsync(userId);
-
-                    return Redirect(redirectUrl);
-                }
-                else
-                {
-                    ViewBag.Message = "Signature validation failed";
-                    return View();
-                }
+                ViewBag.Message = "Signature validation failed";
+                return View();
             }
-
-
+            
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

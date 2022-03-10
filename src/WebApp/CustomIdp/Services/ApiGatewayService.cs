@@ -57,7 +57,7 @@ public class ApiGatewayService : IApiGatewayService
         // For now only sign in is implemented
         switch (operations)
         {
-            case "SignIn":
+            case "SignIn":            
                 signature = Convert.ToBase64String(encoder.ComputeHash(Encoding.UTF8.GetBytes(salt + "\n" + returnUrl)));
                 break;
             default:
@@ -101,9 +101,9 @@ public class ApiGatewayService : IApiGatewayService
         {
             var ssoUrlJson = await response.Content.ReadAsStringAsync();
 
-            dynamic sso = JsonConvert.DeserializeObject(ssoUrlJson);
+            var sso = JsonConvert.DeserializeObject<SsoUrl>(ssoUrlJson);
 
-            return sso.value.Replace("portal", "developer");
+            return sso.Value.Replace("portal", "developer");
         }
 
         return string.Empty;

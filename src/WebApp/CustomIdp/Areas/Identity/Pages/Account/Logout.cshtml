@@ -2,6 +2,8 @@
 @model LogoutModel
 @{
     ViewData["Title"] = "Log out";
+    string RedirectUrl = HttpContext.Request.Query["returnUrl"].ToString() ?? string.Empty;
+    string externalWebsite = HttpContext.Request.Query["externalWebsite"].ToString() ?? string.Empty;
 }
 
 <header>
@@ -9,7 +11,7 @@
     @{
         if (User.Identity.IsAuthenticated)
         {
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@RedirectUrl" asp-route-externalWebsite="@externalWebsite" method="post">
                 <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
             </form>
         }
