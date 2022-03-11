@@ -55,15 +55,22 @@ namespace CustomIdp.Controllers
 
             if (isValid)                                
             {
-                if (User.Identity == null || !User.Identity.IsAuthenticated)
-                {                    
-                    return Redirect($"~/Identity/Account/Login?returnUrl=~/Home/RedirectToDevPortal");
+                if (operation == "SignIn") 
+                {
+                    if (User.Identity == null || !User.Identity.IsAuthenticated)
+                    {
+                        return Redirect($"~/Identity/Account/Login?returnUrl=~/Home/RedirectToDevPortal");
+                    }
+
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    string redirectUrl = await _apiGatewayService.GetRedirectionUrlAsync(userId);
+
+                    return Redirect(redirectUrl);
                 }
-
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                string redirectUrl = await _apiGatewayService.GetRedirectionUrlAsync(userId);
-
-                return Redirect(redirectUrl);
+                else 
+                {
+                    return Redirect($"~/Identity/Account/Register?returnUrl=~/Home/RedirectToDevPortal");
+                }
             }
             else
             {

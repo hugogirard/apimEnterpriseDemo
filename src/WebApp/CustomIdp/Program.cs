@@ -13,6 +13,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IApiGatewayService, ApiGatewayService>();
 
+builder.Services.AddApplicationInsightsTelemetry();
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();

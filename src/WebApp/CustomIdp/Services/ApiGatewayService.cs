@@ -57,7 +57,8 @@ public class ApiGatewayService : IApiGatewayService
         // For now only sign in is implemented
         switch (operations)
         {
-            case "SignIn":            
+            case "SignIn":
+            case "SignUp":
                 signature = Convert.ToBase64String(encoder.ComputeHash(Encoding.UTF8.GetBytes(salt + "\n" + returnUrl)));
                 break;
             default:

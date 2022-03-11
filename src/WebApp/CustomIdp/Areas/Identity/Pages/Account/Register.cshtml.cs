@@ -142,6 +142,7 @@ namespace CustomIdp.Areas.Identity.Pages.Account
                     await _apiGatewayService.CreateUserAsync(Input.Email,Input.Firstname, Input.Lastname, userId);
                     
                     await _signInManager.SignInAsync(user, isPersistent: false);
+                    
                     return LocalRedirect(returnUrl);
 
                 }
