@@ -11,6 +11,16 @@ param publisherName string
 @secure()
 param publisherEmail string
 
+var vnetSpokeDevConfiguration = {
+  name: 'vnet-spoke-dev'
+  addressPrefixe: '11.0.0.0/24'
+  subnets: [
+    {
+      name: 'subnet-apim-dev'
+      addressPrefix: '11.0.1.0/24'
+    }
+}
+
 var suffixDev = uniqueString(devSpoke.id)
 var suffixProd = uniqueString(prodSpoke.id)
 
@@ -32,6 +42,15 @@ resource devSpoke 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 resource prodSpoke 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: spokeProdResourceGroupName
   location: location
+}
+
+module vnetSpokeDev 'modules/vnet/vnet.bicep' = {
+  scope: resourceGroup(devSpoke.name)
+  name: 'vnet-spoke-dev'
+  params: {
+    location: location
+    vnetConfiguration: vnetSpokeDevConfiguration
+  }
 }
 
 module apimDev 'modules/apim/apim.bicep' = {
