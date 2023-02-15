@@ -19,6 +19,7 @@ var vnetSpokeDevConfiguration = {
       name: 'subnet-apim-dev'
       addressPrefix: '11.0.1.0/24'
     }
+  ]
 }
 
 var suffixDev = uniqueString(devSpoke.id)
