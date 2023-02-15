@@ -1,0 +1,101 @@
+name: Run - Publisher
+
+on:
+  # Triggers the workflow on pull request events but only for the main branch
+  pull_request:
+    branches: [main]
+    types: [closed]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      COMMIT_ID_CHOICE:
+        description: 'Choose "publish-all-artifacts-in-repo" only when you want to force republishing all artifacts (e.g. after build failure). Otherwise stick with the default behavior of "publish-artifacts-in-last-commit"'
+        required: true
+        type: choice
+        default: "publish-all-artifacts-in-repo"
+        options:
+          - "publish-artifacts-in-last-commit"
+          - "publish-all-artifacts-in-repo"
+      TEAM:
+        description: 'The path where to deploy the extraction'
+        required: true
+        type: choice
+        options:
+          - OpsTeam
+          - BlueTeam
+          - RedTeam
+    
+jobs:
+  get-commit:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Set path artifacts folder OpsTeam
+        run: |
+          echo "ARTIFACT_FOLDER=team/opsTeam/apimartifacts" >> $GITHUB_ENV          
+        if: startsWith(github.event.inputs.TEAM,'OpsTeam')
+
+      - name: Set path artifacts folder BlueTeam
+        run: |
+          echo "ARTIFACT_FOLDER=team/blueTeam/apimartifacts" >> $GITHUB_ENV
+          echo "CONFIGURATION_YAML_PATH=team/blueTeam/configuration.extractor.yaml" >> $GITHUB_ENV      
+        if: startsWith(github.event.inputs.TEAM,'BlueTeam')
+
+      - name: Set path artifacts folder BlueTeam
+        run: |
+          echo "ARTIFACT_FOLDER=team/redTeam/apimartifacts" >> $GITHUB_ENV
+          echo "CONFIGURATION_YAML_PATH=team/redTeam/configuration.extractor.yaml" >> $GITHUB_ENV      
+        if: startsWith(github.event.inputs.TEAM,'RedTeam') 
+
+      # Set the COMMIT_ID env variable
+      - name: Set the Commit Id
+        id: commit
+        run: |
+          echo "::set-output name=commit_id::${{ github.sha }}"
+    outputs:
+      commit_id: ${{ steps.commit.outputs.commit_id }}
+  
+  #Publish with Commit ID
+  # Push-Changes-To-APIM-Dev-With-Commit-ID:
+  #   if: (github.event.inputs.COMMIT_ID_CHOICE == 'publish-artifacts-in-last-commit' || github.event.inputs.COMMIT_ID_CHOICE == '')
+  #   needs: get-commit
+  #   uses: ./.github/workflows/run-publisher-with-env.yaml
+  #   with:
+  #     API_MANAGEMENT_ENVIRONMENT: dev # change this to match the dev environment created in settings
+  #     COMMIT_ID: ${{ needs.get-commit.outputs.commit_id }}
+  #     API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH: apimartifacts # change this to the artifacts folder
+  #   secrets: inherit
+
+  #Publish without Commit ID. Publishes all artifacts that reside in the artifacts forlder
+  # Push-Changes-To-APIM-Dev-Without-Commit-ID:
+  #   if: ( github.event.inputs.COMMIT_ID_CHOICE == 'publish-all-artifacts-in-repo' )
+  #   needs: get-commit
+  #   uses: ./.github/workflows/run-publisher-with-env.yaml
+  #   with:
+  #     API_MANAGEMENT_ENVIRONMENT: dev # change this to match the dev environment created in settings
+  #     API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH: team/blueTeam/apimartifacts # change this to the artifacts folder
+  #     AZURE_RESOURCE_GROUP_NAME: rg-apim-dev-spoke  
+  #   secrets: inherit
+
+  # Push-Changes-To-APIM-Prod-With-Commit-ID:
+  #   if: (github.event.inputs.COMMIT_ID_CHOICE == 'publish-artifacts-in-last-commit' || github.event.inputs.COMMIT_ID_CHOICE == '')
+  #   needs: [get-commit, Push-Changes-To-APIM-Dev-With-Commit-ID]
+  #   uses: ./.github/workflows/run-publisher-with-env.yaml
+  #   with:
+  #     API_MANAGEMENT_ENVIRONMENT: prod # change this to match the prod environment created in settings
+  #     CONFIGURATION_YAML_PATH: configuration.prod.yaml # make sure the file is available at the root
+  #     API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH: apimartifacts # change this to the artifacts folder
+  #     COMMIT_ID: ${{ needs.get-commit.outputs.commit_id }}
+  #   secrets: inherit
+
+  Push-Changes-To-APIM-Prod-Without-Commit-ID:
+    if: ( github.event.inputs.COMMIT_ID_CHOICE == 'publish-all-artifacts-in-repo' )
+    #needs: [get-commit, Push-Changes-To-APIM-Dev-Without-Commit-ID]
+    uses: ./.github/workflows/run-publisher-with-env.yaml
+    with:
+      API_MANAGEMENT_ENVIRONMENT: prod # change this to match the prod environment created in settings
+      CONFIGURATION_YAML_PATH: configuration.prod.yaml # make sure the file is available at the root
+      API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH: team/blueTeam/apimartifacts # change this to the artifacts folder
+      AZURE_RESOURCE_GROUP_NAME: rg-apim-prod-spoke
+    secrets: inherit

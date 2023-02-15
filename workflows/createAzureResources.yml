@@ -1,0 +1,104 @@
+name: Create Azure Resources
+
+on:
+  workflow_dispatch:    
+
+jobs:
+  create-azure-resources:
+
+    env:
+      DEPLOYMENT_NAME: apim-deployment
+      LOCATION: ${{ secrets.LOCATION }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      
+      - uses: actions/checkout@v3
+
+      - name: Validate that bicep builds
+        run: az bicep build -f main.bicep
+        working-directory: ./infra/bicep
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          tokenPrefix: '__'
+          tokenSuffix: '__'
+          files: '["infra/bicep/main.parameters.json"]'
+        env:
+          location: ${{ env.LOCATION }}
+          publisherName: ${{ secrets.PUBLISHER_NAME }}
+          publisherEmail: ${{ secrets.PUBLISHER_EMAIL }}
+
+      - name: deploy
+        id: createResources
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          scope: subscription
+          region: ${{ env.LOCATION }}
+          deploymentName:  ${{ env.DEPLOYMENT_NAME }}
+          template: ./infra/bicep/main.json
+          parameters: ./infra/bicep/main.parameters.json
+                        
+      # Write the APIM Dev name
+      - uses: gliech/create-github-secret-action@v1
+        name: Write APIM Dev Name
+        with:
+          name: APIM_DEV_NAME
+          value: ${{ steps.createResources.outputs.apimDevName }}
+          pa_token: ${{ secrets.PA_TOKEN }}          
+
+      # Write the APIM Prod name
+      - uses: gliech/create-github-secret-action@v1
+        name: Write APIM Prod Name
+        with:
+          name: APIM_PROD_NAME
+          value: ${{ steps.createResources.outputs.apimProdName }}
+          pa_token: ${{ secrets.PA_TOKEN }}    
+
+      # Write the WebApp Dev name
+      - uses: gliech/create-github-secret-action@v1
+        name: Write Webapp StarWars Dev Name
+        with:
+          name: WEBAPP_SW_DEV_NAME
+          value: ${{ steps.createResources.outputs.webSWDevName }}
+          pa_token: ${{ secrets.PA_TOKEN }}             
+
+      # Write the WebApp Prod name
+      - uses: gliech/create-github-secret-action@v1
+        name: Write Webapp StarWars Prod Name
+        with:
+          name: WEBAPP_SW_PROD_NAME
+          value: ${{ steps.createResources.outputs.webSWProdName }}
+          pa_token: ${{ secrets.PA_TOKEN }}     
+    
+      # Write the WebApp Dev name
+      - uses: gliech/create-github-secret-action@v1
+        name: Write Webapp Fibonnaci Dev Name
+        with:
+          name: WEBAPP_FIBO_DEV_NAME
+          value: ${{ steps.createResources.outputs.webFiboDevName }}
+          pa_token: ${{ secrets.PA_TOKEN }}             
+
+      # Write the WebApp Prod name
+      - uses: gliech/create-github-secret-action@v1
+        name: Write Webapp Fibonnaci Prod Name
+        with:
+          name: WEBAPP_FIBO_PROD_NAME
+          value: ${{ steps.createResources.outputs.webFiboProdName }}
+          pa_token: ${{ secrets.PA_TOKEN }}  
+
+      # Write the WebApp Prod name
+      - uses: gliech/create-github-secret-action@v1
+        name: Write Dev Resource Group Name
+        with:
+          name: DEV_SPOKE_RG_NAME
+          value: ${{ steps.createResources.outputs.rgDevSpokeName }}
+          pa_token: ${{ secrets.PA_TOKEN }}         
+            

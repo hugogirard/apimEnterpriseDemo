@@ -1,0 +1,171 @@
+name: Run - Extractor
+
+on:
+  workflow_dispatch:
+    inputs:
+      TEAM:
+        description: 'The path where to deploy the extraction'
+        required: true
+        type: choice
+        options:
+          - OpsTeam
+          - BlueTeam
+          - RedTeam
+      API_SPECIFICATION_FORMAT:
+        description: 'API Specification Format'     
+        required: true
+        type: choice
+        options:
+        - OpenAPIV3Yaml
+        - OpenAPIV3Json        
+        - OpenAPIV2Yaml
+        - OpenAPIV2Json
+
+env:
+  apiops_release_version: v4.0.1
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    environment: dev # change this to match the dev environment created in settings 
+    steps:
+      - uses: actions/checkout@v3
+          
+      - name: Set path artifacts folder OpsTeam
+        run: |
+          echo "ARTIFACT_FOLDER=team/opsTeam/apimartifacts" >> $GITHUB_ENV          
+        if: startsWith(github.event.inputs.TEAM,'OpsTeam')
+
+      - name: Set path artifacts folder BlueTeam
+        run: |
+          echo "ARTIFACT_FOLDER=team/blueTeam/apimartifacts" >> $GITHUB_ENV
+          echo "CONFIGURATION_YAML_PATH=team/blueTeam/configuration.extractor.yaml" >> $GITHUB_ENV      
+        if: startsWith(github.event.inputs.TEAM,'BlueTeam')
+
+      - name: Set path artifacts folder RedTeam
+        run: |
+          echo "ARTIFACT_FOLDER=team/redTeam/apimartifacts" >> $GITHUB_ENV
+          echo "CONFIGURATION_YAML_PATH=team/redTeam/configuration.extractor.yaml" >> $GITHUB_ENV      
+        if: startsWith(github.event.inputs.TEAM,'RedTeam')        
+
+      - name: Run extractor without Config Yaml
+        if: ${{ github.event.inputs.TEAM == 'OpsTeam' }}
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION }}
+          AZURE_RESOURCE_GROUP_NAME: ${{ secrets.DEV_SPOKE_RG_NAME }}
+          API_MANAGEMENT_SERVICE_NAME: ${{ secrets.APIM_DEV_NAME }}
+          API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH: ${{ GITHUB.WORKSPACE }}/${{ env.ARTIFACT_FOLDER }}
+          API_SPECIFICATION_FORMAT: ${{ github.event.inputs.API_SPECIFICATION_FORMAT }} 
+        run: |
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = "Stop"
+          $VerbosePreference = "Continue"
+          $InformationPreference = "Continue"
+
+          Write-Information "Downloading extractor..."
+          $extractorFileName = "${{ runner.os }}" -like "*win*" ? "extractor.win-x64.exe" : "extractor.linux-x64.exe"
+          $uri = "https://github.com/Azure/apiops/releases/download/${{ env.apiops_release_version }}/$extractorFileName"
+          $destinationFilePath = Join-Path "${{ runner.temp }}" "extractor.exe"
+          Invoke-WebRequest -Uri "$uri" -OutFile "$destinationFilePath"
+
+          if ("${{ runner.os }}" -like "*linux*")
+          {
+            Write-Information "Setting file permissions..."
+            & chmod +x "$destinationFilePath"
+            if ($LASTEXITCODE -ne 0) { throw "Setting file permissions failed."}
+          }
+
+          & "$destinationFilePath"              
+          if ($LASTEXITCODE -ne 0) { throw "Running extractor failed."}
+
+          Write-Information "Execution complete."
+        shell: pwsh
+      
+      - name: Run extractor with Config Yaml
+        if: ${{ github.event.inputs.TEAM == 'RedTeam' }}
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION }}
+          AZURE_RESOURCE_GROUP_NAME: ${{ secrets.DEV_SPOKE_RG_NAME }}
+          API_MANAGEMENT_SERVICE_NAME: ${{ secrets.APIM_DEV_NAME }}
+          API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH: ${{ GITHUB.WORKSPACE }}/${{ env.ARTIFACT_FOLDER }}
+          API_SPECIFICATION_FORMAT: ${{ github.event.inputs.API_SPECIFICATION_FORMAT }} 
+          CONFIGURATION_YAML_PATH:  ${{ GITHUB.WORKSPACE }}/${{ env.CONFIGURATION_YAML_PATH }}
+        run: |
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = "Stop"
+          $VerbosePreference = "Continue"
+          $InformationPreference = "Continue"
+
+          Write-Information "Downloading extractor..."
+          $extractorFileName = "${{ runner.os }}" -like "*win*" ? "extractor.win-x64.exe" : "extractor.linux-x64.exe"
+          $uri = "https://github.com/Azure/apiops/releases/download/${{ env.apiops_release_version }}/$extractorFileName"
+          $destinationFilePath = Join-Path "${{ runner.temp }}" "extractor.exe"
+          Invoke-WebRequest -Uri "$uri" -OutFile "$destinationFilePath"
+
+          if ("${{ runner.os }}" -like "*linux*")
+          {
+            Write-Information "Setting file permissions..."
+            & chmod +x "$destinationFilePath"
+            if ($LASTEXITCODE -ne 0) { throw "Setting file permissions failed."}
+          }
+
+          & "$destinationFilePath"              
+          if ($LASTEXITCODE -ne 0) { throw "Running extractor failed."}
+
+          Write-Information "Execution complete."
+        shell: pwsh
+
+      - name: Run extractor with Config Yaml
+        if: ${{ github.event.inputs.TEAM == 'BlueTeam' }}
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION }}
+          AZURE_RESOURCE_GROUP_NAME: ${{ secrets.DEV_SPOKE_RG_NAME }}
+          API_MANAGEMENT_SERVICE_NAME: ${{ secrets.APIM_DEV_NAME }}
+          API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH: ${{ GITHUB.WORKSPACE }}/${{ env.ARTIFACT_FOLDER }}
+          API_SPECIFICATION_FORMAT: ${{ github.event.inputs.API_SPECIFICATION_FORMAT }} 
+          CONFIGURATION_YAML_PATH:  ${{ GITHUB.WORKSPACE }}/${{ env.CONFIGURATION_YAML_PATH }}
+        run: |
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = "Stop"
+          $VerbosePreference = "Continue"
+          $InformationPreference = "Continue"
+
+          Write-Information "Downloading extractor..."
+          $extractorFileName = "${{ runner.os }}" -like "*win*" ? "extractor.win-x64.exe" : "extractor.linux-x64.exe"
+          $uri = "https://github.com/Azure/apiops/releases/download/${{ env.apiops_release_version }}/$extractorFileName"
+          $destinationFilePath = Join-Path "${{ runner.temp }}" "extractor.exe"
+          Invoke-WebRequest -Uri "$uri" -OutFile "$destinationFilePath"
+
+          if ("${{ runner.os }}" -like "*linux*")
+          {
+            Write-Information "Setting file permissions..."
+            & chmod +x "$destinationFilePath"
+            if ($LASTEXITCODE -ne 0) { throw "Setting file permissions failed."}
+          }
+
+          & "$destinationFilePath"              
+          if ($LASTEXITCODE -ne 0) { throw "Running extractor failed."}
+
+          Write-Information "Execution complete."
+        shell: pwsh
+
+      - name: Create artifacts pull request
+        uses: peter-evans/create-pull-request@v3
+        env:
+          TEAM: ${{ env.ARTIFACT_FOLDER }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "updated extract from apim instance ${{ env.TEAM }}"
+          title: "${{ env.TEAM }} - extract"
+          body: >
+            This PR is auto-generated by Github actions workflow
+          labels: extract, automated pr
