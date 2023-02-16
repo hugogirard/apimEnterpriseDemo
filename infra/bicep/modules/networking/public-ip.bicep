@@ -14,7 +14,7 @@ resource pip 'Microsoft.Network/publicIPAddresses@2020-07-01' = {
     tier: 'Regional'
   }
   properties: {
-    publicIPAllocationMethod: 'Dynamic'    
+    publicIPAllocationMethod: 'Static'    
   }
 }
 
