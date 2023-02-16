@@ -13,11 +13,22 @@ param publisherEmail string
 
 var vnetSpokeDevConfiguration = {
   name: 'vnet-spoke-dev'
-  addressPrefixe: '11.0.0.0/24'
+  addressPrefixe: '11.0.0.0/16'
   subnets: [
     {
       name: 'subnet-apim-dev'
       addressPrefix: '11.0.1.0/24'
+    }
+  ]
+}
+
+var vnetSpokeProdConfiguration = {
+  name: 'vnet-spoke-prod'
+  addressPrefixe: '12.0.0.0/16'
+  subnets: [
+    {
+      name: 'subnet-apim-prod'
+      addressPrefix: '12.0.1.0/24'
     }
   ]
 }
@@ -103,13 +114,13 @@ module vnetSpokeProd 'modules/networking/vnet.spoke.bicep' = {
   params: {
     name: 'vnet-spoke-prod'
     location: location
-    vnetConfiguration: vnetSpokeDevConfiguration
+    vnetConfiguration: vnetSpokeProdConfiguration
     nsgId: nsgApimDev.outputs.nsgId
   }
 }
 
 module pipProdApim 'modules/networking/public-ip.bicep' = {
-  scope: resourceGroup(devSpoke.name)
+  scope: resourceGroup(prodSpoke.name)
   name: 'pipProdApim'
   params: {
     location: location
