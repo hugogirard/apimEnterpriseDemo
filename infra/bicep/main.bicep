@@ -89,19 +89,49 @@ module apimDev 'modules/apim/apim.bicep' = {
   }
 }
 
-// module apimProd 'modules/apim/apim.bicep' = {
-//   scope: resourceGroup(prodSpoke.name)
-//   name: 'apim-prod'
-//   params: {
-//     location: location
-//     name: 'apim-prod-${suffixProd}'
-//     publisherEmail: publisherEmail
-//     publisherName: publisherName
-//     tags: {
-//       environment: 'prod'
-//     }
-//   }
-// }
+module nsgApimProd 'modules/networking/nsg.apim.bicep' = {
+  scope: resourceGroup(devSpoke.name)
+  name: 'nsg-apim-prod'
+  params: {
+    location: location
+  }
+}
+
+module vnetSpokeProd 'modules/networking/vnet.spoke.bicep' = {
+  scope: resourceGroup(devSpoke.name)
+  name: 'vnet-spoke-prod'
+  params: {
+    name: 'vnet-spoke-prod'
+    location: location
+    vnetConfiguration: vnetSpokeDevConfiguration
+    nsgId: nsgApimDev.outputs.nsgId
+  }
+}
+
+module pipProdApim 'modules/networking/public-ip.bicep' = {
+  scope: resourceGroup(devSpoke.name)
+  name: 'pipProdApim'
+  params: {
+    location: location
+    name: 'pip-prod-apim-${suffixProd}'
+  }
+}
+
+module apimProd 'modules/apim/apim.bicep' = {
+  scope: resourceGroup(prodSpoke.name)
+  name: 'apim-prod'
+  params: {
+    location: location
+    name: 'apim-prod-${suffixProd}'
+    publisherEmail: publisherEmail
+    publisherName: publisherName
+    apimSubnetId: vnetSpokeProd.outputs.subnetIdOne
+    pipId: pipProdApim.outputs.publicIp
+    tags: {
+      environment: 'prod'
+    }
+  }
+}
 
 module insightDev 'modules/appInsight/appinsight.bicep' = {
   scope: resourceGroup(devSpoke.name)
