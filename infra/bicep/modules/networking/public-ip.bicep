@@ -7,9 +7,12 @@ resource pip 'Microsoft.Network/publicIPAddresses@2020-07-01' = {
   sku: {
     name: 'Standard'
     tier: 'Regional'
-  }
+  }  
   properties: {
     publicIPAllocationMethod: 'Static'    
+    dnsSettings: {
+      domainNameLabel: name
+    }
   }
 }
 
