@@ -45,12 +45,31 @@ resource prodSpoke 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
 }
 
-module vnetSpokeDev 'modules/vnet/vnet.bicep' = {
+module nsgApimDev 'modules/networking/nsg.apim.bicep' = {
+  scope: resourceGroup(devSpoke.name)
+  name: 'nsg-apim-dev'
+  params: {
+    location: location
+  }
+}
+
+module vnetSpokeDev 'modules/networking/vnet.spoke.bicep' = {
   scope: resourceGroup(devSpoke.name)
   name: 'vnet-spoke-dev'
   params: {
+    name: 'vnet-spoke-dev'
     location: location
     vnetConfiguration: vnetSpokeDevConfiguration
+    nsgId: nsgApimDev.outputs.nsgId
+  }
+}
+
+module pipDevApim 'modules/networking/public-ip.bicep' = {
+  scope: resourceGroup(devSpoke.name)
+  name: 'pipDevApim'
+  params: {
+    location: location
+    name: 'pip-dev-apim-${suffixDev}'
   }
 }
 
@@ -62,25 +81,27 @@ module apimDev 'modules/apim/apim.bicep' = {
     name: 'apim-dev-${suffixDev}'
     publisherEmail: publisherEmail
     publisherName: publisherName
+    pipId: pipDevApim.outputs.publicIp
+    apimSubnetId: vnetSpokeDev.outputs.subnetIdOne    
     tags: {
       environment: 'dev'
-    }
+    }    
   }
 }
 
-module apimProd 'modules/apim/apim.bicep' = {
-  scope: resourceGroup(prodSpoke.name)
-  name: 'apim-prod'
-  params: {
-    location: location
-    name: 'apim-prod-${suffixProd}'
-    publisherEmail: publisherEmail
-    publisherName: publisherName
-    tags: {
-      environment: 'prod'
-    }
-  }
-}
+// module apimProd 'modules/apim/apim.bicep' = {
+//   scope: resourceGroup(prodSpoke.name)
+//   name: 'apim-prod'
+//   params: {
+//     location: location
+//     name: 'apim-prod-${suffixProd}'
+//     publisherEmail: publisherEmail
+//     publisherName: publisherName
+//     tags: {
+//       environment: 'prod'
+//     }
+//   }
+// }
 
 module insightDev 'modules/appInsight/appinsight.bicep' = {
   scope: resourceGroup(devSpoke.name)
