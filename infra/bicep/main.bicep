@@ -101,7 +101,7 @@ module apimDev 'modules/apim/apim.bicep' = {
 }
 
 module nsgApimProd 'modules/networking/nsg.apim.bicep' = {
-  scope: resourceGroup(devSpoke.name)
+  scope: resourceGroup(prodSpoke.name)
   name: 'nsg-apim-prod'
   params: {
     location: location
@@ -109,7 +109,7 @@ module nsgApimProd 'modules/networking/nsg.apim.bicep' = {
 }
 
 module vnetSpokeProd 'modules/networking/vnet.spoke.bicep' = {
-  scope: resourceGroup(devSpoke.name)
+  scope: resourceGroup(prodSpoke.name)
   name: 'vnet-spoke-prod'
   params: {
     name: 'vnet-spoke-prod'
