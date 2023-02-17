@@ -1,0 +1,28 @@
+<mxfile host="65bd71144e">
+    <diagram id="kNl__UGa5GxFegPqyisN" name="Page-1">
+        <mxGraphModel dx="1038" dy="784" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#ffffff" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="3" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#FF0000;shape=mxgraph.azure.git_repository;" vertex="1" parent="1">
+                    <mxGeometry x="188" y="381" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#FF0000;shape=mxgraph.azure.git_repository;" vertex="1" parent="1">
+                    <mxGeometry x="194" y="253" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#FF0000;shape=mxgraph.azure.git_repository;" vertex="1" parent="1">
+                    <mxGeometry x="188" y="479" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#000000;shape=mxgraph.azure.github_code;pointerEvents=1;" vertex="1" parent="1">
+                    <mxGeometry x="194" y="125" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#0000CC;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.users.administrator;" vertex="1" parent="1">
+                    <mxGeometry x="372" y="384" width="58" height="56" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#0000CC;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.users.users;" vertex="1" parent="1">
+                    <mxGeometry x="384" y="267" width="46" height="50" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

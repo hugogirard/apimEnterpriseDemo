@@ -52,6 +52,27 @@ var vnetHubConfiguration = {
   ]
 }
 
+var vnetOnPremiseConfiguration = {
+  name: 'vnet-onpremise'
+  addressPrefixe: '150.0.0.0/16'
+  subnets: [
+    {
+      name: 'snet-api-server'
+      addressPrefix: '150.0.1.0/24'
+    }
+    {
+      name: 'snet-api-gateway'
+      addressPrefix: '150.0.2.0/24'
+    }
+    {
+      name: 'snet-client'
+      addressPrefix: '150.0.3.0/24'
+    }        
+  ]
+}
+
+// Create resource group
+
 var suffixDev = uniqueString(devSpoke.id)
 var suffixProd = uniqueString(prodSpoke.id)
 var suffixHub = uniqueString(hub.id)
@@ -76,6 +97,12 @@ resource prodSpoke 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
 }
 
+resource onpremiseRg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  name: onPremiseResourceGroupName
+  location: location
+}
+
+// End create resource group
 
 // Create the hub
 
@@ -110,6 +137,8 @@ module bastion 'modules/bastion/azureBastion.bicep' = {
 
 
 // End create hub
+
+// Create dev spoke
 
 module nsgApimDev 'modules/networking/nsg.apim.bicep' = {
   scope: resourceGroup(devSpoke.name)
@@ -155,6 +184,51 @@ module apimDev 'modules/apim/apim.bicep' = {
   }
 }
 
+module insightDev 'modules/appInsight/appinsight.bicep' = {
+  scope: resourceGroup(devSpoke.name)
+  name: 'insightDev'
+  params: {
+    location: location
+    suffix: suffixDev
+  }
+}
+
+module aspDev 'modules/web/appservice.bicep' = {
+  scope: resourceGroup(devSpoke.name)
+  name: 'aspDev'
+  params: {
+    location: location
+    suffix: suffixDev
+  }
+}
+
+module webSWDev 'modules/web/webapp.bicep' = {
+  scope: resourceGroup(devSpoke.name)
+  name: 'webDev'
+  params: {
+    location: location    
+    appInsightsName: insightDev.outputs.appInsightName
+    aspName: aspDev.outputs.aspName
+    webappname: 'web-starwars-api-dev-${suffixDev}'
+  }
+}
+
+module webFiboDev 'modules/web/webapp.bicep' = {
+  scope: resourceGroup(devSpoke.name)
+  name: 'webfiboDev'
+  params: {
+    location: location    
+    appInsightsName: insightDev.outputs.appInsightName
+    aspName: aspDev.outputs.aspName
+    webappname: 'web-fibonacci-api-dev-${suffixDev}'
+  }
+}
+
+// End create dev spoke
+
+
+// Create prod spoke
+
 module nsgApimProd 'modules/networking/nsg.apim.bicep' = {
   scope: resourceGroup(prodSpoke.name)
   name: 'nsg-apim-prod'
@@ -199,15 +273,6 @@ module apimProd 'modules/apim/apim.bicep' = {
   }
 }
 
-module insightDev 'modules/appInsight/appinsight.bicep' = {
-  scope: resourceGroup(devSpoke.name)
-  name: 'insightDev'
-  params: {
-    location: location
-    suffix: suffixDev
-  }
-}
-
 module insightProd 'modules/appInsight/appinsight.bicep' = {
   scope: resourceGroup(prodSpoke.name)
   name: 'insightProd'
@@ -217,32 +282,12 @@ module insightProd 'modules/appInsight/appinsight.bicep' = {
   }
 }
 
-module aspDev 'modules/web/appservice.bicep' = {
-  scope: resourceGroup(devSpoke.name)
-  name: 'aspDev'
-  params: {
-    location: location
-    suffix: suffixDev
-  }
-}
-
 module aspProd 'modules/web/appservice.bicep' = {
   scope: resourceGroup(prodSpoke.name)
   name: 'aspProd'
   params: {
     location: location
     suffix: suffixProd
-  }
-}
-
-module webSWDev 'modules/web/webapp.bicep' = {
-  scope: resourceGroup(devSpoke.name)
-  name: 'webDev'
-  params: {
-    location: location    
-    appInsightsName: insightDev.outputs.appInsightName
-    aspName: aspDev.outputs.aspName
-    webappname: 'web-starwars-api-dev-${suffixDev}'
   }
 }
 
@@ -257,17 +302,6 @@ module webSWProd 'modules/web/webapp.bicep' = {
   }
 }
 
-module webFiboDev 'modules/web/webapp.bicep' = {
-  scope: resourceGroup(devSpoke.name)
-  name: 'webfiboDev'
-  params: {
-    location: location    
-    appInsightsName: insightDev.outputs.appInsightName
-    aspName: aspDev.outputs.aspName
-    webappname: 'web-fibonacci-api-dev-${suffixDev}'
-  }
-}
-
 module webFiboProd 'modules/web/webapp.bicep' = {
   scope: resourceGroup(prodSpoke.name)
   name: 'webfiborod'
@@ -278,6 +312,22 @@ module webFiboProd 'modules/web/webapp.bicep' = {
     webappname: 'web-fibonacci-api-prod-${suffixProd}'
   }
 }
+
+// End create prod spoke
+
+// Create on premise resources
+
+module vnetOnPrem 'modules/onpremise/networking.bicep' = {
+  scope: resourceGroup(onpremiseRg.name)
+  name: 'vnet-onprem'
+  params: {    
+    location: location
+    vnetConfiguration: vnetOnPremiseConfiguration
+  }
+}
+
+
+// end on premise resource
 
 output apimDevName string = apimDev.outputs.apimName
 output apimProdName string = apimProd.outputs.apimName
