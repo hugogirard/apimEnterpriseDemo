@@ -33,8 +33,28 @@ var vnetSpokeProdConfiguration = {
   ]
 }
 
+var vnetHubConfiguration = {
+  name: 'vnet-hub'
+  addressPrefixe: '10.0.0.0/16'
+  subnets: [
+    {
+      name: 'AzureFirewallSubnet'
+      addressPrefix: '10.0.1.0/24'
+    }
+    {
+      name: 'AzureBastionSubnet'
+      addressPrefix: '10.0.2.0/26'
+    }    
+    {
+      name: 'snet-jumpbox'
+      addressPrefix: '10.0.3.0/27'
+    }     
+  ]
+}
+
 var suffixDev = uniqueString(devSpoke.id)
 var suffixProd = uniqueString(prodSpoke.id)
+var suffixHub = uniqueString(hub.id)
 
 var hubResourceGroup = 'rg-hub'
 var spokeDevResourceGroupName = 'rg-apim-dev-spoke'
@@ -55,6 +75,41 @@ resource prodSpoke 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: spokeProdResourceGroupName
   location: location
 }
+
+
+// Create the hub
+
+module vnetHub 'modules/networking/vnet.hub.bicep' = {
+  scope: resourceGroup(hubResourceGroup)
+  name: 'hub-vnet'
+  params: {
+    location: location
+    vnetConfiguration: vnetHubConfiguration
+  }
+}
+
+module azureFirewall 'modules/firewall/azureFirewall.bicep' = {
+  scope: resourceGroup(hubResourceGroup)
+  name: 'firewall'
+  params: {
+    location: location
+    subnetId: vnetHub.outputs.subnets[0].id
+    suffix: suffixHub
+  }
+}
+
+module bastion 'modules/bastion/azureBastion.bicep' = {
+  scope: resourceGroup(hubResourceGroup)
+  name: 'bastion'
+  params: {
+    location: location
+    subnetId: vnetHub.outputs.subnets[1].id
+    suffix: suffixHub
+  }
+}
+
+
+// End create hub
 
 module nsgApimDev 'modules/networking/nsg.apim.bicep' = {
   scope: resourceGroup(devSpoke.name)
