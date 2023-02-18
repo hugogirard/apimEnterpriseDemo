@@ -47,12 +47,12 @@ jobs:
           parameters: ./infra/bicep/main.parameters.json
                         
       # Write the APIM Dev name
-      - uses: gliech/create-github-secret-action@v1
-        name: Write APIM Dev Name
-        with:
-          name: APIM_DEV_NAME
-          value: ${{ steps.createResources.outputs.apimDevName }}
-          pa_token: ${{ secrets.PA_TOKEN }}          
+      # - uses: gliech/create-github-secret-action@v1
+      #   name: Write APIM Dev Name
+      #   with:
+      #     name: APIM_DEV_NAME
+      #     value: ${{ steps.createResources.outputs.apimDevName }}
+      #     pa_token: ${{ secrets.PA_TOKEN }}          
 
       # Write the APIM Prod name
       - uses: gliech/create-github-secret-action@v1
@@ -63,12 +63,12 @@ jobs:
           pa_token: ${{ secrets.PA_TOKEN }}    
 
       # Write the WebApp Dev name
-      - uses: gliech/create-github-secret-action@v1
-        name: Write Webapp StarWars Dev Name
-        with:
-          name: WEBAPP_SW_DEV_NAME
-          value: ${{ steps.createResources.outputs.webSWDevName }}
-          pa_token: ${{ secrets.PA_TOKEN }}             
+      # - uses: gliech/create-github-secret-action@v1
+      #   name: Write Webapp StarWars Dev Name
+      #   with:
+      #     name: WEBAPP_SW_DEV_NAME
+      #     value: ${{ steps.createResources.outputs.webSWDevName }}
+      #     pa_token: ${{ secrets.PA_TOKEN }}             
 
       # Write the WebApp Prod name
       - uses: gliech/create-github-secret-action@v1
@@ -79,12 +79,12 @@ jobs:
           pa_token: ${{ secrets.PA_TOKEN }}     
     
       # Write the WebApp Dev name
-      - uses: gliech/create-github-secret-action@v1
-        name: Write Webapp Fibonnaci Dev Name
-        with:
-          name: WEBAPP_FIBO_DEV_NAME
-          value: ${{ steps.createResources.outputs.webFiboDevName }}
-          pa_token: ${{ secrets.PA_TOKEN }}             
+      # - uses: gliech/create-github-secret-action@v1
+      #   name: Write Webapp Fibonnaci Dev Name
+      #   with:
+      #     name: WEBAPP_FIBO_DEV_NAME
+      #     value: ${{ steps.createResources.outputs.webFiboDevName }}
+      #     pa_token: ${{ secrets.PA_TOKEN }}             
 
       # Write the WebApp Prod name
       - uses: gliech/create-github-secret-action@v1
@@ -95,10 +95,10 @@ jobs:
           pa_token: ${{ secrets.PA_TOKEN }}  
 
       # Write the WebApp Prod name
-      - uses: gliech/create-github-secret-action@v1
-        name: Write Dev Resource Group Name
-        with:
-          name: DEV_SPOKE_RG_NAME
-          value: ${{ steps.createResources.outputs.rgDevSpokeName }}
-          pa_token: ${{ secrets.PA_TOKEN }}         
+      # - uses: gliech/create-github-secret-action@v1
+      #   name: Write Dev Resource Group Name
+      #   with:
+      #     name: DEV_SPOKE_RG_NAME
+      #     value: ${{ steps.createResources.outputs.rgDevSpokeName }}
+      #     pa_token: ${{ secrets.PA_TOKEN }}         
             
