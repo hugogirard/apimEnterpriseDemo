@@ -1,0 +1,73 @@
+name: Destroy Azure Resources
+
+on:
+  workflow_dispatch:
+
+jobs:
+  destroy-hub:
+    
+    env:      
+      RG_NAME: rg-hub
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - run: |
+          az group delete --name ${{ env.RG_NAME }} --no-wait -y
+
+  destroy-spoke-dev:
+    
+    env:      
+      RG_NAME: rg-apim-dev-spoke
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - run: |
+          az group delete --name ${{ env.RG_NAME }} --no-wait -y          
+          
+  destroy-spoke-prod:
+    
+    env:      
+      RG_NAME: rg-apim-prod-spoke
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - run: |
+          az group delete --name ${{ env.RG_NAME }} --no-wait -y                
+          
+  destroy-on-premise:
+    
+    env:      
+      RG_NAME: rg-onpremise
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - run: |
+          az group delete --name ${{ env.RG_NAME }} --no-wait -y            
