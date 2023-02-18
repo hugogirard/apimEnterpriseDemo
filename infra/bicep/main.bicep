@@ -11,16 +11,16 @@ param publisherName string
 @secure()
 param publisherEmail string
 
-var vnetSpokeDevConfiguration = {
-  name: 'vnet-spoke-dev'
-  addressPrefixe: '11.0.0.0/16'
-  subnets: [
-    {
-      name: 'subnet-apim-dev'
-      addressPrefix: '11.0.1.0/24'
-    }
-  ]
-}
+// var vnetSpokeDevConfiguration = {
+//   name: 'vnet-spoke-dev'
+//   addressPrefixe: '11.0.0.0/16'
+//   subnets: [
+//     {
+//       name: 'subnet-apim-dev'
+//       addressPrefix: '11.0.1.0/24'
+//     }
+//   ]
+// }
 
 var vnetSpokeProdConfiguration = {
   name: 'vnet-spoke-prod'
@@ -73,12 +73,12 @@ var vnetOnPremiseConfiguration = {
 
 // Create resource group
 
-var suffixDev = uniqueString(devSpoke.id)
+//var suffixDev = uniqueString(devSpoke.id)
 var suffixProd = uniqueString(prodSpoke.id)
 var suffixHub = uniqueString(hub.id)
 
 var hubResourceGroup = 'rg-hub'
-var spokeDevResourceGroupName = 'rg-apim-dev-spoke'
+//var spokeDevResourceGroupName = 'rg-apim-dev-spoke'
 var spokeProdResourceGroupName = 'rg-apim-prod-spoke'
 var onPremiseResourceGroupName = 'rg-onpremise'
 
@@ -87,10 +87,10 @@ resource hub 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
 }
 
-resource devSpoke 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: spokeDevResourceGroupName
-  location: location
-}
+// resource devSpoke 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+//   name: spokeDevResourceGroupName
+//   location: location
+// }
 
 resource prodSpoke 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: spokeProdResourceGroupName
@@ -140,89 +140,89 @@ module bastion 'modules/bastion/azureBastion.bicep' = {
 
 // Create dev spoke
 
-module nsgApimDev 'modules/networking/nsg.apim.bicep' = {
-  scope: resourceGroup(devSpoke.name)
-  name: 'nsg-apim-dev'
-  params: {
-    location: location
-  }
-}
+// module nsgApimDev 'modules/networking/nsg.apim.bicep' = {
+//   scope: resourceGroup(devSpoke.name)
+//   name: 'nsg-apim-dev'
+//   params: {
+//     location: location
+//   }
+// }
 
-module vnetSpokeDev 'modules/networking/vnet.spoke.bicep' = {
-  scope: resourceGroup(devSpoke.name)
-  name: 'vnet-spoke-dev'
-  params: {
-    name: 'vnet-spoke-dev'
-    location: location
-    vnetConfiguration: vnetSpokeDevConfiguration
-    nsgId: nsgApimDev.outputs.nsgId
-  }
-}
+// module vnetSpokeDev 'modules/networking/vnet.spoke.bicep' = {
+//   scope: resourceGroup(devSpoke.name)
+//   name: 'vnet-spoke-dev'
+//   params: {
+//     name: 'vnet-spoke-dev'
+//     location: location
+//     vnetConfiguration: vnetSpokeDevConfiguration
+//     nsgId: nsgApimDev.outputs.nsgId
+//   }
+// }
 
-module pipDevApim 'modules/networking/public-ip.bicep' = {
-  scope: resourceGroup(devSpoke.name)
-  name: 'pipDevApim'
-  params: {
-    location: location
-    name: 'pip-dev-apim-${suffixDev}'
-  }
-}
+// module pipDevApim 'modules/networking/public-ip.bicep' = {
+//   scope: resourceGroup(devSpoke.name)
+//   name: 'pipDevApim'
+//   params: {
+//     location: location
+//     name: 'pip-dev-apim-${suffixDev}'
+//   }
+// }
 
-module apimDev 'modules/apim/apim.bicep' = {
-  scope: resourceGroup(devSpoke.name)
-  name: 'apim-dev'
-  params: {
-    location: location
-    name: 'apim-dev-${suffixDev}'
-    publisherEmail: publisherEmail
-    publisherName: publisherName
-    pipId: pipDevApim.outputs.publicIp
-    apimSubnetId: vnetSpokeDev.outputs.subnetIdOne    
-    tags: {
-      environment: 'dev'
-    }    
-  }
-}
+// module apimDev 'modules/apim/apim.bicep' = {
+//   scope: resourceGroup(devSpoke.name)
+//   name: 'apim-dev'
+//   params: {
+//     location: location
+//     name: 'apim-dev-${suffixDev}'
+//     publisherEmail: publisherEmail
+//     publisherName: publisherName
+//     pipId: pipDevApim.outputs.publicIp
+//     apimSubnetId: vnetSpokeDev.outputs.subnetIdOne    
+//     tags: {
+//       environment: 'dev'
+//     }    
+//   }
+// }
 
-module insightDev 'modules/appInsight/appinsight.bicep' = {
-  scope: resourceGroup(devSpoke.name)
-  name: 'insightDev'
-  params: {
-    location: location
-    suffix: suffixDev
-  }
-}
+// module insightDev 'modules/appInsight/appinsight.bicep' = {
+//   scope: resourceGroup(devSpoke.name)
+//   name: 'insightDev'
+//   params: {
+//     location: location
+//     suffix: suffixDev
+//   }
+// }
 
-module aspDev 'modules/web/appservice.bicep' = {
-  scope: resourceGroup(devSpoke.name)
-  name: 'aspDev'
-  params: {
-    location: location
-    suffix: suffixDev
-  }
-}
+// module aspDev 'modules/web/appservice.bicep' = {
+//   scope: resourceGroup(devSpoke.name)
+//   name: 'aspDev'
+//   params: {
+//     location: location
+//     suffix: suffixDev
+//   }
+// }
 
-module webSWDev 'modules/web/webapp.bicep' = {
-  scope: resourceGroup(devSpoke.name)
-  name: 'webDev'
-  params: {
-    location: location    
-    appInsightsName: insightDev.outputs.appInsightName
-    aspName: aspDev.outputs.aspName
-    webappname: 'web-starwars-api-dev-${suffixDev}'
-  }
-}
+// module webSWDev 'modules/web/webapp.bicep' = {
+//   scope: resourceGroup(devSpoke.name)
+//   name: 'webDev'
+//   params: {
+//     location: location    
+//     appInsightsName: insightDev.outputs.appInsightName
+//     aspName: aspDev.outputs.aspName
+//     webappname: 'web-starwars-api-dev-${suffixDev}'
+//   }
+// }
 
-module webFiboDev 'modules/web/webapp.bicep' = {
-  scope: resourceGroup(devSpoke.name)
-  name: 'webfiboDev'
-  params: {
-    location: location    
-    appInsightsName: insightDev.outputs.appInsightName
-    aspName: aspDev.outputs.aspName
-    webappname: 'web-fibonacci-api-dev-${suffixDev}'
-  }
-}
+// module webFiboDev 'modules/web/webapp.bicep' = {
+//   scope: resourceGroup(devSpoke.name)
+//   name: 'webfiboDev'
+//   params: {
+//     location: location    
+//     appInsightsName: insightDev.outputs.appInsightName
+//     aspName: aspDev.outputs.aspName
+//     webappname: 'web-fibonacci-api-dev-${suffixDev}'
+//   }
+// }
 
 // End create dev spoke
 
@@ -329,10 +329,10 @@ module vnetOnPrem 'modules/onpremise/networking.bicep' = {
 
 // end on premise resource
 
-output apimDevName string = apimDev.outputs.apimName
+//output apimDevName string = apimDev.outputs.apimName
 output apimProdName string = apimProd.outputs.apimName
-output webSWDevName string = webSWDev.outputs.appName
+//output webSWDevName string = webSWDev.outputs.appName
 output webSWProdName string = webSWProd.outputs.appName
-output webFiboDevName string = webFiboDev.outputs.appName
+//output webFiboDevName string = webFiboDev.outputs.appName
 output webFiboProdName string = webFiboProd.outputs.appName
-output rgDevSpokeName string = spokeDevResourceGroupName
+//output rgDevSpokeName string = spokeDevResourceGroupName
