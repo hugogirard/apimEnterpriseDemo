@@ -1,0 +1,72 @@
+<mxfile host="65bd71144e">
+    <diagram id="BgYZBQfLpJnDGLLiGgfL" name="Page-1">
+        <mxGraphModel dx="1038" dy="784" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#ffffff" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="On premise datacenter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#0000CC;dashed=1;dashPattern=12 12;fontColor=#000000;fontSize=15;labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;" vertex="1" parent="1">
+                    <mxGeometry x="136" y="536" width="572" height="282" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="Api" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Non_Azure_Machine.svg;dashed=1;dashPattern=12 12;strokeColor=#0000CC;fontColor=#000000;fillColor=none;labelBackgroundColor=none;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="606" y="582" width="45.88" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=15;fontColor=#000000;strokeColor=#000000;strokeWidth=2;startArrow=classic;startFill=1;" edge="1" parent="1" source="6" target="9">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Applications" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Non_Azure_Machine.svg;dashed=1;dashPattern=12 12;strokeColor=#0000CC;fontColor=#000000;fillColor=none;labelBackgroundColor=none;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="202" y="582" width="45.88" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="" style="group" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="313" y="589" width="231" height="87" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/integration/API_Management_Services.svg;dashed=1;dashPattern=12 12;labelBackgroundColor=none;strokeColor=#0000CC;fontColor=#000000;fillColor=none;" vertex="1" parent="10">
+                    <mxGeometry x="4" y="11" width="45.5" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;Self-hosted gateway" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;strokeColor=#0000CC;fontSize=15;fontColor=#000000;fillColor=none;align=center;" vertex="1" parent="10">
+                    <mxGeometry width="231" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Docker.svg;labelBackgroundColor=none;strokeColor=#0000CC;fontColor=#000000;fillColor=none;" vertex="1" parent="10">
+                    <mxGeometry x="93" y="46" width="50" height="41" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#000000;fontSize=15;fontColor=#000000;strokeWidth=2;startArrow=classic;startFill=1;" edge="1" parent="1" source="9" target="5">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#505050;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.servers.datacenter;dashPattern=12 12;" vertex="1" parent="1">
+                    <mxGeometry x="176" y="501" width="53" height="53" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="Api" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Non_Azure_Machine.svg;dashed=1;dashPattern=12 12;strokeColor=#0000CC;fontColor=#000000;fillColor=none;labelBackgroundColor=none;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="608" y="695" width="45.88" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" style="edgeStyle=none;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=-0.153;entryY=0.378;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=#000000;strokeWidth=2;fontSize=15;fontColor=#000000;startArrow=classic;startFill=1;" edge="1" parent="1" source="9" target="13">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" style="edgeStyle=none;html=1;entryX=0;entryY=1;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=2;fontSize=15;fontColor=#000000;startArrow=classic;startFill=1;" edge="1" parent="1" source="15" target="9">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="Applications" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Non_Azure_Machine.svg;dashed=1;dashPattern=12 12;strokeColor=#0000CC;fontColor=#000000;fillColor=none;labelBackgroundColor=none;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="200" y="695" width="45.88" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="Applications that are hosted on premise and consume apis on premise." style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;labelBackgroundColor=none;fontSize=16;fontColor=#000000;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="142" y="120" width="546" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="&lt;ul&gt;&lt;li style=&quot;text-align: left;&quot;&gt;One api gateway solution to manage on premise and in Azure&lt;/li&gt;&lt;li style=&quot;text-align: left;&quot;&gt;No extra hop in Azure for premise traffic&lt;/li&gt;&lt;li style=&quot;text-align: left;&quot;&gt;Only egress on port 443 to Azure API Management Plane&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;labelBackgroundColor=none;fontSize=16;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="113" y="195" width="614" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="Azure API&amp;nbsp; Management&lt;br&gt;Control Plane" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;strokeColor=#0000CC;fontSize=13;fontColor=#000000;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="315" y="340" width="225" height="67" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/integration/API_Management_Services.svg;labelBackgroundColor=none;strokeColor=#0000CC;fontColor=#000000;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="313" y="324" width="41.17" height="38" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=1;fontSize=13;fontColor=#000000;startArrow=none;startFill=0;dashed=1;" edge="1" parent="1" source="9" target="20">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="Port 443 outbound" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;fontColor=#000000;labelBackgroundColor=none;" vertex="1" connectable="0" parent="21">
+                    <mxGeometry x="0.3076" y="-1" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
