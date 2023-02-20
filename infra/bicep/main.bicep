@@ -244,7 +244,7 @@ module vnetSpokeProd 'modules/networking/vnet.spoke.bicep' = {
     name: 'vnet-spoke-prod'
     location: location
     vnetConfiguration: vnetSpokeProdConfiguration
-    nsgId: nsgApimDev.outputs.nsgId
+    nsgId: nsgApimProd.outputs.nsgId
   }
 }
 
