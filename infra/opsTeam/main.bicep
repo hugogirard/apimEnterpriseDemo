@@ -30,6 +30,16 @@ resource prodSpoke 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 
 // End create resource group
 
+// Create Vault
+module keyVault 'modules/vault/vault.bicep' = {
+  scope: resourceGroup(hubResourceGroup)
+  name: 'keyVault'
+  params: {
+    suffix: suffixProd
+    location: location
+  }
+}
+
 // Create the hub
 module vnetHub 'modules/networking/vnet.hub.bicep' = {
   scope: resourceGroup(hubResourceGroup)
