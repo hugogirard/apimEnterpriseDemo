@@ -20,6 +20,7 @@ resource firewallPolicies 'Microsoft.Network/firewallPolicies@2021-05-01' = {
 resource firewall 'Microsoft.Network/azureFirewalls@2021-05-01' = {
   name: 'fw-${suffix}'
   location: location
+  zones: []
   properties: {
     ipConfigurations: [
       {
@@ -38,6 +39,7 @@ resource firewall 'Microsoft.Network/azureFirewalls@2021-05-01' = {
       tier: 'Basic'
     }
     managementIpConfiguration: {
+      name: 'managementIpConfig'
       properties: {
         subnet: {
           id: subnetManagemenentId
