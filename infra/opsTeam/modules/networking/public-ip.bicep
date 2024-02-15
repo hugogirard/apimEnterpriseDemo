@@ -16,4 +16,4 @@ resource pip 'Microsoft.Network/publicIPAddresses@2020-07-01' = {
   }
 }
 
-output publicIp string = pip.id
+output publicId string = pip.id

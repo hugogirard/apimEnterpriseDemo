@@ -1,26 +1,17 @@
 param location string
 param suffix string
-param subnetId string
+param subnetFwId string
+param subnetManagemenentId string
+param pipFwId string
+param pipFwManagementId string
 
-resource pip 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
-  name: 'pip-fw-${suffix}'
-  location: location
-  properties: {
-    publicIPAllocationMethod: 'Static'
-    publicIPAddressVersion: 'IPv4'
-  }
-  sku: {
-    name: 'AZFW_VNet'
-    tier: 'Basic'
-  }
-}
 
 resource firewallPolicies 'Microsoft.Network/firewallPolicies@2021-05-01' = {
   name: 'fw-policy-${suffix}'
   location: location
   properties: {
     sku: {
-      tier: 'Standard'
+      tier: 'Basic'
     }
     threatIntelMode: 'Alert'
   }
@@ -35,16 +26,26 @@ resource firewall 'Microsoft.Network/azureFirewalls@2021-05-01' = {
         name: 'ipconfig'
         properties: {
           subnet: {
-            id: subnetId
+            id: subnetFwId
           }
           publicIPAddress: {
-            id: pip.id
+            id: pipFwId
           }
         }
       }
     ]
     sku: {
-      tier: 'Standard'
+      tier: 'Basic'
+    }
+    managementIpConfiguration: {
+      properties: {
+        subnet: {
+          id: subnetManagemenentId
+        }
+        publicIPAddress: {
+          id: pipFwManagementId
+        }      
+      }
     }
     firewallPolicy: {
       id: firewallPolicies.id
@@ -53,4 +54,3 @@ resource firewall 'Microsoft.Network/azureFirewalls@2021-05-01' = {
 }
 
 output privateIp string = firewall.properties.ipConfigurations[0].properties.privateIPAddress
-output publicIp string = pip.properties.ipAddress

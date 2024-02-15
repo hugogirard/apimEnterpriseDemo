@@ -13,7 +13,7 @@ param publisherEmail string
 
 // Create resource group
 var suffixProd = uniqueString(prodSpoke.id)
-//var suffixHub = uniqueString(hub.id)
+var suffixHub = uniqueString(hub.id)
 
 var hubResourceGroup = 'rg-hub'
 var spokeProdResourceGroupName = 'rg-apim-prod-spoke'
@@ -49,17 +49,42 @@ module vnetHub 'modules/networking/vnet.hub.bicep' = {
   }
 }
 
-// module azureFirewall 'modules/firewall/azureFirewall.bicep' = {
-//   scope: resourceGroup(hubResourceGroup)
-//   name: 'firewall'
-//   params: {
-//     location: location
-//     subnetId: vnetHub.outputs.subnets[0].id
-//     suffix: suffixHub
-//   }
-// }
-
 // End create hub
+
+// Create Azure Firewall
+
+module pipfw 'modules/networking/public-ip.bicep' = {
+  scope: resourceGroup(hubResourceGroup)
+  name: 'pipfw'
+  params: {
+    location: location
+    name: 'pip-fw-${suffixProd}'
+  }
+}
+
+module pipfwmanagement 'modules/networking/public-ip.bicep' = {
+  scope: resourceGroup(hubResourceGroup)
+  name: 'pipfwmanagement'
+  params: {
+    location: location
+    name: 'pip-fw-management-${suffixProd}'
+  }
+}
+
+module firewall 'modules/firewall/azureFirewall.bicep' = {
+  scope: resourceGroup(hubResourceGroup)
+  name: 'firewall'
+  params: {
+    location: location
+    pipFwId: pipfw.outputs.publicId
+    pipFwManagementId: pipfwmanagement.outputs.publicId    
+    suffix: suffixHub
+    subnetFwId: vnetHub.outputs.subnets[0].id
+    subnetManagemenentId: vnetHub.outputs.subnets[1].id
+  }
+}
+
+// end firewall
 
 // Create shared prod spoke
 module vnetSpokeShared 'modules/networking/vnet.shared.spoke.bicep' = {
@@ -88,7 +113,7 @@ module apimProd 'modules/apim/apim.bicep' = {
     publisherEmail: publisherEmail
     publisherName: publisherName
     apimSubnetId: vnetSpokeShared.outputs.subnetIdOne
-    pipId: pipProdApim.outputs.publicIp
+    pipId: pipProdApim.outputs.publicId
     tags: {
       environment: 'prod'
     }
