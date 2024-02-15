@@ -96,4 +96,26 @@ module apimProd 'modules/apim/apim.bicep' = {
 }
 // End create prod spoke
 
+// Peering
+
+module hubToSpoke 'modules/networking/peering.bicep' = {
+  scope: resourceGroup(hubResourceGroup)
+  name: 'hubToSpoke'
+  params: {
+    parentVnetName: vnetHub.outputs.vnetName
+    peeringName: 'hubToSpoke'
+    remoteVnetId: vnetSpokeShared.outputs.vnetId
+  }
+}
+
+module spokeToHub 'modules/networking/peering.bicep' = {
+  scope: resourceGroup(hubResourceGroup)
+  name: 'spokeToHub'
+  params: {
+    parentVnetName: vnetSpokeShared.outputs.vnetName
+    peeringName: 'spokeToHub'
+    remoteVnetId: vnetHub.outputs.vnetId
+  }
+}
+
 output apimProdName string = apimProd.outputs.apimName

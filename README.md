@@ -12,5 +12,12 @@
 
 ## Certificate
 
-You need a public domain and Azure DNS Public Zone to create a certificate. The certificate will be used to secure the APIM Developer Portal.
+Run the script let's encrypt
 
+## Upload cert
+
+Upload the certificate to the Key Vault and give access to APIM MSI
+
+Next configure your custom domain and create 3 new secrets
+
+| Secret Name | Description |
