@@ -10,7 +10,7 @@ var vnetSpokeSharedConfiguration = {
     }
     {
       name: 'subnet-apim-prod'
-      addressPrefix: '10.2.1.0/24'
+      addressPrefix: '10.1.2.0/24'
     }
   ]
 }
