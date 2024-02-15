@@ -109,7 +109,7 @@ module hubToSpoke 'modules/networking/peering.bicep' = {
 }
 
 module spokeToHub 'modules/networking/peering.bicep' = {
-  scope: resourceGroup(hubResourceGroup)
+  scope: resourceGroup(prodSpoke.name)
   name: 'spokeToHub'
   params: {
     parentVnetName: vnetSpokeShared.outputs.vnetName
