@@ -87,11 +87,10 @@ module firewall 'modules/firewall/azureFirewall.bicep' = {
 // end firewall
 
 module routeTable 'modules/networking/routeTable.bicep' = {
-  scope: resourceGroup(hubResourceGroup)
+  scope: resourceGroup(prodSpoke.name)
   name: 'routeTable'
   params: {
     fwPrivateIP: firewall.outputs.privateIp
-    fwPublicIP: pipfw.outputs.publicIp
     location: location
   }
 }
