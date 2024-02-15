@@ -32,6 +32,6 @@ jobs:
           scope: subscription
           region: ${{ secrets.LOCATION }}
           deploymentName:  ${{ github.run_id }}
-          template: ./infra/bicep/main.bicep
+          template: ./infra/opsTeam/main.bicep
           parameters: location=${{ secrets.LOCATION }} publisherName=${{ secrets.PUBLISHER_NAME }} publisherEmail=${{ secrets.PUBLISHER_EMAIL }}                          
             
