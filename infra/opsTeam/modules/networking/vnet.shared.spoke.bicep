@@ -180,6 +180,17 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
           networkSecurityGroup: {
             id: apimNSG.id            
           }
+          serviceEndpoints: [
+            {
+              service: 'Microsoft.Storage'
+            }
+            {
+              service: 'Microsoft.KeyVault'
+            }
+            {
+              service: 'Microsoft.Sql'
+            }
+          ]
         }
       }      
     ]
@@ -188,4 +199,4 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
 
 output vnetId string = vnet.id
 output vnetName string = vnet.name
-output subnetIdOne string = vnet.properties.subnets[0].id
+output subnetIdOne string = vnet.properties.subnets[1].id
