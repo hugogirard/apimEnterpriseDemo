@@ -170,9 +170,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
         }
       }
       {
-        name: vnetSpokeSharedConfiguration.subnets[0].name
+        name: vnetSpokeSharedConfiguration.subnets[1].name
         properties: {
-          addressPrefix: vnetSpokeSharedConfiguration.subnets[0].addressPrefix
+          addressPrefix: vnetSpokeSharedConfiguration.subnets[1].addressPrefix
           networkSecurityGroup: {
             id: apimNSG.id
           }

@@ -13,7 +13,7 @@ param publisherEmail string
 
 // Create resource group
 var suffixProd = uniqueString(prodSpoke.id)
-var suffixHub = uniqueString(hub.id)
+//var suffixHub = uniqueString(hub.id)
 
 var hubResourceGroup = 'rg-hub'
 var spokeProdResourceGroupName = 'rg-apim-prod-spoke'
