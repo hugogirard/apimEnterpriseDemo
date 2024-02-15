@@ -1,4 +1,5 @@
 param location string
+param routeTableId string
 
 var vnetSpokeSharedConfiguration = {
   name: 'vnet-spoke-prod'
@@ -173,8 +174,11 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
         name: vnetSpokeSharedConfiguration.subnets[1].name
         properties: {
           addressPrefix: vnetSpokeSharedConfiguration.subnets[1].addressPrefix
+          routeTable: {
+            id: routeTableId
+          }
           networkSecurityGroup: {
-            id: apimNSG.id
+            id: apimNSG.id            
           }
         }
       }      

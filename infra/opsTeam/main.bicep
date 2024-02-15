@@ -86,12 +86,23 @@ module firewall 'modules/firewall/azureFirewall.bicep' = {
 
 // end firewall
 
+module routeTable 'modules/networking/routeTable.bicep' = {
+  scope: resourceGroup(hubResourceGroup)
+  name: 'routeTable'
+  params: {
+    fwPrivateIP: firewall.outputs.privateIp
+    fwPublicIP: pipfw.outputs.publicIp
+    location: location
+  }
+}
+
 // Create shared prod spoke
 module vnetSpokeShared 'modules/networking/vnet.shared.spoke.bicep' = {
   scope: resourceGroup(prodSpoke.name)
   name: 'vnet-spoke-shared'
   params: {    
-    location: location    
+    location: location   
+    routeTableId: routeTable.outputs.routeTableId
   }
 }
 

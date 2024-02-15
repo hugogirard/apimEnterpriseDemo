@@ -17,3 +17,4 @@ resource pip 'Microsoft.Network/publicIPAddresses@2020-07-01' = {
 }
 
 output publicId string = pip.id
+output publicIp string = pip.properties.ipAddress
