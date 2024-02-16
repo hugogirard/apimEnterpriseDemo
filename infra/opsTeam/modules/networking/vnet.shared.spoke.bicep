@@ -147,6 +147,19 @@ resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
           destinationAddressPrefix: 'AzureKeyVault'
         }
       }
+      {
+        name: 'apim-azure-monitor'
+        properties: {
+          priority: 2030
+          access: 'Allow'
+          direction: 'Outbound'
+          protocol: 'Tcp'
+          destinationPortRange: '443'
+          sourceAddressPrefix: 'VirtualNetwork'
+          sourcePortRange: '*'
+          destinationAddressPrefix: 'AzureMonitor'
+        }
+      }
     ]
   }
 }

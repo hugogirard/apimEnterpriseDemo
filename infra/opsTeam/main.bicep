@@ -136,6 +136,10 @@ module apimProd 'modules/apim/apim.bicep' = {
 module hubToSpoke 'modules/networking/peering.bicep' = {
   scope: resourceGroup(hubResourceGroup)
   name: 'hubToSpoke'
+  dependsOn: [
+    vnetHub
+    vnetSpokeShared
+  ]
   params: {
     parentVnetName: vnetHub.outputs.vnetName
     peeringName: 'hubToSpoke'
@@ -146,6 +150,10 @@ module hubToSpoke 'modules/networking/peering.bicep' = {
 module spokeToHub 'modules/networking/peering.bicep' = {
   scope: resourceGroup(prodSpoke.name)
   name: 'spokeToHub'
+  dependsOn: [
+    vnetHub
+    vnetSpokeShared
+  ]
   params: {
     parentVnetName: vnetSpokeShared.outputs.vnetName
     peeringName: 'spokeToHub'
