@@ -17,6 +17,8 @@ resource firewallPolicies 'Microsoft.Network/firewallPolicies@2021-05-01' = {
   }
 }
 
+
+
 resource firewall 'Microsoft.Network/azureFirewalls@2021-05-01' = {
   name: 'fw-${suffix}'
   location: location
@@ -52,6 +54,84 @@ resource firewall 'Microsoft.Network/azureFirewalls@2021-05-01' = {
     firewallPolicy: {
       id: firewallPolicies.id
     }
+  }
+}
+
+resource networkRuleCollections 'Microsoft.Network/firewallPolicies/ruleCollectionGroups@2023-06-01' = {
+  parent: firewallPolicies
+  name: 'DefaultNetworkRuleCollectionGroup'
+  properties: {
+    priority: 200
+    ruleCollections: [
+      {
+        ruleCollectionType: 'FirewallPolicyFilterRuleCollection'
+        action: {
+          type: 'Allow'
+        }
+        rules: [
+          {
+            ruleType: 'NetworkRule'
+            name: 'ApimToMonitor'
+            ipProtocols: [
+              'TCP'
+            ]
+            sourceAddresses: [
+              '10.1.2.0/24'
+            ]
+            sourceIpGroups: []
+            destinationAddresses: [
+              'AzureMonitor'
+            ]
+            destinationIpGroups: []
+            destinationFqdns: []
+            destinationPorts: [
+              '443'
+              '1886'
+            ]
+          }
+          {
+            ruleType: 'NetworkRule'
+            name: 'ApimToAzureAD'
+            ipProtocols: [
+              'TCP'
+            ]
+            sourceAddresses: [
+              '10.1.2.0/24'
+            ]
+            sourceIpGroups: []
+            destinationAddresses: [
+              'AzureActiveDirectory'
+            ]
+            destinationIpGroups: []
+            destinationFqdns: []
+            destinationPorts: [
+              '443'
+            ]
+          }
+          {
+            ruleType: 'NetworkRule'
+            name: 'SiteRecovery'
+            ipProtocols: [
+              'TCP'
+            ]
+            sourceAddresses: [
+              '10.1.2.0/24'
+            ]
+            sourceIpGroups: []
+            destinationAddresses: [
+              'AzureSiteRecovery'
+            ]
+            destinationIpGroups: []
+            destinationFqdns: []
+            destinationPorts: [
+              '443'
+            ]
+          }
+        ]
+        name: 'DefaultNetworkRule'
+        priority: 100
+      }
+    ]
   }
 }
 
