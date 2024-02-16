@@ -11,6 +11,12 @@ param publisherName string
 @secure()
 param publisherEmail string
 
+// param dnsZoneName string
+// param developerPortalFqdn string
+// param gatewayFqdn string
+// param managementPortalFqdn string
+
+
 // Create resource group
 var suffixProd = uniqueString(prodSpoke.id)
 var suffixHub = uniqueString(hub.id)

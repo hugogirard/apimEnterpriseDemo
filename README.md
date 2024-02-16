@@ -9,6 +9,10 @@
 | LOCATION | Azure Region where the resource will be deployed |
 | PUBLISHER_EMAIL | Email of admin for APIM |
 | PUBLISHER_NAME | Name of the organization for Dev Portal |
+| Custom_DOMAIN_NAME | Custom domain name for APIM for the DNS Azure Private Zone.  Needs to match with your SSL certificate for example (contoso.com) |
+| developerPortalFqdn | Developer Portal FQDN |
+| gatewayFqdn | Gateway FQDN |
+| managementPortalFqdn | managementPortalFqdn |
 
 ## Certificate
 
