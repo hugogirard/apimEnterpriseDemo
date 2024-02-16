@@ -154,7 +154,10 @@ resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
           access: 'Allow'
           direction: 'Outbound'
           protocol: 'Tcp'
-          destinationPortRange: '1886-443'
+          destinationPortRanges: [
+            '443'
+            '1886'
+          ]
           sourceAddressPrefix: 'VirtualNetwork'
           sourcePortRange: '*'
           destinationAddressPrefix: 'AzureMonitor'

@@ -11,10 +11,10 @@ param publisherName string
 @secure()
 param publisherEmail string
 
-// param dnsZoneName string
-// param developerPortalFqdn string
-// param gatewayFqdn string
-// param managementPortalFqdn string
+param dnsZoneName string
+param developerPortalFqdn string
+param gatewayFqdn string
+param managementPortalFqdn string
 
 
 // Create resource group
@@ -164,6 +164,20 @@ module spokeToHub 'modules/networking/peering.bicep' = {
     parentVnetName: vnetSpokeShared.outputs.vnetName
     peeringName: 'spokeToHub'
     remoteVnetId: vnetHub.outputs.vnetId
+  }
+}
+
+// Private DNS Zone
+module apimPrivateDNS 'modules/dns/private.dns.zone.bicep' = {
+  scope: resourceGroup(prodSpoke.name)
+  name: 'apimPrivateDNS'
+  params: {
+    developerPortalFqdn: developerPortalFqdn
+    dnsZoneName: dnsZoneName
+    gatewayFqdn: gatewayFqdn
+    location: location
+    managementPortalFqdn: managementPortalFqdn 
+    vnetId: vnetSpokeShared.outputs.vnetId
   }
 }
 
