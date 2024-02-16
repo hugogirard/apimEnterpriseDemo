@@ -6,6 +6,14 @@ param gatewayFqdn string
 param managementPortalFqdn string
 
 
+resource dns 'Microsoft.Network/privateDnsZones@2018-09-01' = {
+    name: dnsZoneName
+    location: 'global'
+    properties: {
+    }
+}
+
+
 resource privateDnsZone 'Microsoft.Network/privateDnsZones@2021-05-01' = {
   name: dnsZoneName
   location: location
@@ -21,41 +29,41 @@ resource vnetLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2021-05
   }
 }
 
-resource developerPortalRecord 'Microsoft.Network/privateDnsZones/A@2021-05-01' = {
-  name: 'developer'
-  parent: privateDnsZone
-  properties: {
-    ttl: 3600
-    aRecords: [
-      {
-        ipv4Address: developerPortalFqdn
-      }
-    ]
-  }
-}
+// resource developerPortalRecord 'Microsoft.Network/privateDnsZones/A@2021-05-01' = {
+//   name: 'developer'
+//   parent: privateDnsZone
+//   properties: {
+//     ttl: 3600
+//     aRecords: [
+//       {
+//         ipv4Address: developerPortalFqdn
+//       }
+//     ]
+//   }
+// }
 
-resource gatewayRecord 'Microsoft.Network/privateDnsZones/A@2021-05-01' = {
-  name: 'gateway'
-  parent: privateDnsZone
-  properties: {
-    ttl: 3600
-    aRecords: [
-      {
-        ipv4Address: gatewayFqdn
-      }
-    ]
-  }
-}
+// resource gatewayRecord 'Microsoft.Network/privateDnsZones/A@2021-05-01' = {
+//   name: 'gateway'
+//   parent: privateDnsZone
+//   properties: {
+//     ttl: 3600
+//     aRecords: [
+//       {
+//         ipv4Address: gatewayFqdn
+//       }
+//     ]
+//   }
+// }
 
-resource managementPortalRecord 'Microsoft.Network/privateDnsZones/A@2021-05-01' = {
-  name: 'management'
-  parent: privateDnsZone
-  properties: {
-    ttl: 3600
-    aRecords: [
-      {
-        ipv4Address: managementPortalFqdn
-      }
-    ]
-  }
-}
+// resource managementPortalRecord 'Microsoft.Network/privateDnsZones/A@2021-05-01' = {
+//   name: 'management'
+//   parent: privateDnsZone
+//   properties: {
+//     ttl: 3600
+//     aRecords: [
+//       {
+//         ipv4Address: managementPortalFqdn
+//       }
+//     ]
+//   }
+// }
