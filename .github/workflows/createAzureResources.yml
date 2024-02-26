@@ -52,3 +52,9 @@ jobs:
           name: SPOKE_RESOURCE_GROUP_NAME
           value: ${{ steps.createResources.outputs.spokeRgName }}
           pa_token: ${{ secrets.PA_TOKEN }}              
+
+      - uses: gliech/create-github-secret-action@v1
+        with:
+          name: SUBNET_GATEWAY_ID
+          value: ${{ steps.createResources.outputs.subnetGatewayId }}
+          pa_token: ${{ secrets.PA_TOKEN }}                  

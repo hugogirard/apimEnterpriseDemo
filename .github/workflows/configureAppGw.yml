@@ -4,7 +4,7 @@ on:
   workflow_dispatch:    
 
 jobs:
-  create-azure-resources:
+  deploy-configure-app-gateway:
 
     runs-on: ubuntu-latest
 
@@ -17,13 +17,11 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: deploy
-        id: createResources
-        uses: azure/arm-deploy@v1
+      - uses: azure/arm-deploy@v1
+        id: deployGateway
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-          scope: subscription
-          region: ${{ secrets.LOCATION }}
+          resourceGroupName: ${{ secrets.SPOKE_RESOURCE_GROUP_NAME }}
           deploymentName:  ${{ github.run_id }}
-          template: ./infra/opsTeam/main.bicep
-          parameters: location=${{ secrets.LOCATION }} publisherName=${{ secrets.PUBLISHER_NAME }} publisherEmail=${{ secrets.PUBLISHER_EMAIL }} dnsZoneName=${{ secrets.CUSTOM_DOMAIN_NAME }}
+          template: ./infra/opsTeam/gateway.bicep        
+          parameters: gwSubnetId=${{ secrets.LOCATION }} publisherName=${{ secrets.PUBLISHER_NAME }} publisherEmail=${{ secrets.PUBLISHER_EMAIL }} dnsZoneName=${{ secrets.CUSTOM_DOMAIN_NAME }}

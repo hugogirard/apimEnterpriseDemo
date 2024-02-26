@@ -185,3 +185,4 @@ module identity 'modules/identity/userIdentity.bicep' = {
 output apimProdName string = apimProd.outputs.apimName
 output userIdentityId string = identity.outputs.userIdentityId
 output spokeRgName string = spokeProdResourceGroupName
+output subnetGatewayId string = vnetSpokeShared.outputs.subnetIdOne
