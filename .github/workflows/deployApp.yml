@@ -1,0 +1,37 @@
+name: Deploy Web App
+on:
+  workflow_dispatch:    
+
+env:
+  RG_NAME: 'rg-app-api-demo'
+
+jobs:
+  create-azure-resources:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      
+      - uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: deploy
+        id: createResources
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          scope: subscription
+          region: ${{ secrets.LOCATION }}
+          deploymentName:  ${{ github.run_id }}
+          template: ./infra/opsTeam/app.bicep
+          parameters: location=${{ secrets.LOCATION }} rgName=${{ env.RG_NAME }}
+            
+      - uses: gliech/create-github-secret-action@v1
+        with:
+          name: WEB_APP_NAME
+          value: ${{ steps.createResources.outputs.webAppName }}
+          pa_token: ${{ secrets.PA_TOKEN }}    
