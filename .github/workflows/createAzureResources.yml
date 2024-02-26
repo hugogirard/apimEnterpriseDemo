@@ -35,3 +35,20 @@ jobs:
           template: ./infra/opsTeam/main.bicep
           parameters: location=${{ secrets.LOCATION }} publisherName=${{ secrets.PUBLISHER_NAME }} publisherEmail=${{ secrets.PUBLISHER_EMAIL }} dnsZoneName=${{ secrets.CUSTOM_DOMAIN_NAME }}
             
+      - uses: gliech/create-github-secret-action@v1
+        with:
+          name: USER_IDENTITY_ID
+          value: ${{ steps.createResources.outputs.userIdentityId }}
+          pa_token: ${{ secrets.PA_TOKEN }}        
+      
+      - uses: gliech/create-github-secret-action@v1
+        with:
+          name: APIM_PROD_NAME
+          value: ${{ steps.createResources.outputs.apimProdName }}
+          pa_token: ${{ secrets.PA_TOKEN }}        
+          
+      - uses: gliech/create-github-secret-action@v1
+        with:
+          name: SPOKE_RESOURCE_GROUP_NAME
+          value: ${{ steps.createResources.outputs.spokeRgName }}
+          pa_token: ${{ secrets.PA_TOKEN }}              

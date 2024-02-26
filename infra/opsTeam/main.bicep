@@ -174,4 +174,14 @@ module apimPrivateDNS 'modules/dns/private.dns.zone.bicep' = {
   }
 }
 
+module identity 'modules/identity/userIdentity.bicep' = {
+  scope: resourceGroup(prodSpoke.name)
+  name: 'userIdentity'
+  params: {
+    location: location
+  }
+}
+
 output apimProdName string = apimProd.outputs.apimName
+output userIdentityId string = identity.outputs.userIdentityId
+output spokeRgName string = spokeProdResourceGroupName
