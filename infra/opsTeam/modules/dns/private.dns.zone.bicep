@@ -8,6 +8,12 @@ resource dns 'Microsoft.Network/privateDnsZones@2020-06-01' = {
     }
 }
 
+resource soa 'Microsoft.Network/privateDnsZones/SOA@2020-06-01' = {
+  name: '@'
+  parent: dns
+  properties: {}
+}
+
 resource vnetLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
   name: 'vnetLink'
   location: 'global'
