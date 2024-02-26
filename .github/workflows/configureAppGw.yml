@@ -24,4 +24,4 @@ jobs:
           resourceGroupName: ${{ secrets.SPOKE_RESOURCE_GROUP_NAME }}
           deploymentName:  ${{ github.run_id }}
           template: ./infra/opsTeam/gateway.bicep        
-          parameters: gwSubnetId=${{ secrets.LOCATION }} publisherName=${{ secrets.PUBLISHER_NAME }} publisherEmail=${{ secrets.PUBLISHER_EMAIL }} dnsZoneName=${{ secrets.CUSTOM_DOMAIN_NAME }}
+          parameters: gwSubnetId=${{ secrets.SUBNET_GATEWAY_ID }} certLink=${{ secrets.SECRET_CERT_LINK }} apiGwHostname=${{ secrets.API_HOSTNAME }} devPortalFqdn=${{ secrets.DEV_PORTAL_HOSTAME }} managementFqdn=${{ secrets.MANAGEMENT_HOSTNAME }} location=${{ secrets.LOCATION}} identityId=${{ secrets.USER_IDENTITY_ID }}

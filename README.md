@@ -22,3 +22,7 @@ Upload the certificate to the Key Vault and give access to APIM MSI
 Next configure your custom domain and create 3 new secrets
 
 | Secret Name | Description |
+| API_HOSTNAME | Custom domain name for APIM Gateway |
+| DEV_PORTAL_HOSTAME | Custom domain name for APIM Developer Portal |
+| MANAGEMENT_HOSTNAME | Custom domain name for APIM Management Plane |
+| SECRET_CERT_LINK | Secret link to the certificate in the Key Vault |
