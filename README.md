@@ -10,9 +10,6 @@
 | PUBLISHER_EMAIL | Email of admin for APIM |
 | PUBLISHER_NAME | Name of the organization for Dev Portal |
 | CUSTOM_DOMAIN_NAME | Custom domain name for APIM for the DNS Azure Private Zone.  Needs to match with your SSL certificate for example (contoso.com) |
-| DEV_PORTAL_FQDN | Developer Portal FQDN for example (dev.contoso.com) |
-| GATEWAY_FQDN | Gateway FQDN  for example (api.contoso.com) |
-| MANAGEMENT_FQDN | managementPortalFqdn (management.contoso.com) |
 
 ## Certificate
 

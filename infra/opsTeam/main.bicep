@@ -12,10 +12,6 @@ param publisherName string
 param publisherEmail string
 
 param dnsZoneName string
-param developerPortalFqdn string
-param gatewayFqdn string
-param managementPortalFqdn string
-
 
 // Create resource group
 var suffixProd = uniqueString(prodSpoke.id)
@@ -43,6 +39,7 @@ module keyVault 'modules/vault/vault.bicep' = {
   params: {
     suffix: suffixProd
     location: location
+    apimIdentity: apimProd.outputs.apimMsi
   }
 }
 
@@ -172,11 +169,8 @@ module apimPrivateDNS 'modules/dns/private.dns.zone.bicep' = {
   scope: resourceGroup(prodSpoke.name)
   name: 'apimPrivateDNS'
   params: {
-    developerPortalFqdn: developerPortalFqdn
     dnsZoneName: dnsZoneName
-    gatewayFqdn: gatewayFqdn
     location: location
-    managementPortalFqdn: managementPortalFqdn 
     vnetId: vnetSpokeShared.outputs.vnetId
   }
 }
