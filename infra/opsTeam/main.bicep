@@ -39,7 +39,6 @@ module keyVault 'modules/vault/vault.bicep' = {
   params: {
     suffix: suffixProd
     location: location
-    apimIdentity: apimProd.outputs.apimMsi
   }
 }
 
