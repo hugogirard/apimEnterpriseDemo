@@ -39,6 +39,7 @@ module keyVault 'modules/vault/vault.bicep' = {
   params: {
     suffix: suffixProd
     location: location
+
   }
 }
 
@@ -168,8 +169,7 @@ module apimPrivateDNS 'modules/dns/private.dns.zone.bicep' = {
   scope: resourceGroup(prodSpoke.name)
   name: 'apimPrivateDNS'
   params: {
-    dnsZoneName: dnsZoneName
-    location: location
+    dnsZoneName: dnsZoneName    
     vnetId: vnetSpokeShared.outputs.vnetId
   }
 }
