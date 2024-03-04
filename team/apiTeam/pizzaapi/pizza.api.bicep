@@ -1,13 +1,18 @@
 param ApimServiceName string
 param WebUrl string
 
-resource ApimServiceName_fibonacci 'Microsoft.ApiManagement/service/apis@2022-04-01-preview' = {  
-  name: '${ApimServiceName}/PizzaApi'
+resource apim 'Microsoft.ApiManagement/service@2023-05-01-preview' existing = {
+  name: ApimServiceName
+}
+
+resource ApimServiceName_fibonacci 'Microsoft.ApiManagement/service/apis@2023-05-01-preview' = {  
+  name: 'PizzaApi'
+  parent: apim
   properties: {
     apiRevision: '2'
     isCurrent: true
     subscriptionRequired: true
-    displayName: 'Fibonacci'    
+    displayName: 'PizzaApi'    
     format: 'openapi+json'
     value: loadTextContent('./openapi.yml')
     serviceUrl: WebUrl
