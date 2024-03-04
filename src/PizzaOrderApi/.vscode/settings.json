@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "bin\\Release\\net8.0\\publish",
+    "appService.defaultWebAppToDeploy": "/subscriptions/3b3187ce-0c74-4372-875d-f26ff29eacde/resourceGroups/rg-apim-prod-spoke/providers/Microsoft.Web/sites/pizzaorderapihg"
+}

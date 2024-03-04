@@ -1,0 +1,1 @@
+public record PizzasViewModel(string Name, double Price);

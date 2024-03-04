@@ -1,0 +1,12 @@
+C:\github\apimEnterpriseDemo\src\PizzaOrderApi\bin\Release\net8.0\publish\PizzaOrderApi.exe
+C:\github\apimEnterpriseDemo\src\PizzaOrderApi\bin\Release\net8.0\publish\appsettings.Development.json
+C:\github\apimEnterpriseDemo\src\PizzaOrderApi\bin\Release\net8.0\publish\appsettings.json
+C:\github\apimEnterpriseDemo\src\PizzaOrderApi\bin\Release\net8.0\publish\PizzaOrderApi.dll
+C:\github\apimEnterpriseDemo\src\PizzaOrderApi\bin\Release\net8.0\publish\PizzaOrderApi.deps.json
+C:\github\apimEnterpriseDemo\src\PizzaOrderApi\bin\Release\net8.0\publish\PizzaOrderApi.runtimeconfig.json
+C:\github\apimEnterpriseDemo\src\PizzaOrderApi\bin\Release\net8.0\publish\PizzaOrderApi.pdb
+C:\github\apimEnterpriseDemo\src\PizzaOrderApi\bin\Release\net8.0\publish\Microsoft.AspNetCore.OpenApi.dll
+C:\github\apimEnterpriseDemo\src\PizzaOrderApi\bin\Release\net8.0\publish\Microsoft.OpenApi.dll
+C:\github\apimEnterpriseDemo\src\PizzaOrderApi\bin\Release\net8.0\publish\Swashbuckle.AspNetCore.Swagger.dll
+C:\github\apimEnterpriseDemo\src\PizzaOrderApi\bin\Release\net8.0\publish\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\github\apimEnterpriseDemo\src\PizzaOrderApi\bin\Release\net8.0\publish\Swashbuckle.AspNetCore.SwaggerUI.dll
