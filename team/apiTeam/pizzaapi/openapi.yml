@@ -1,0 +1,95 @@
+openapi: 3.0.1
+info:
+  title: PizzaOrderApi
+  version: '1.0'
+servers:
+  - url: https://api.hugogirard.net/piz
+paths:
+  /pizzas:
+    get:
+      tags:
+        - PizzaOrderApi
+      summary: GetAllPizzas
+      operationId: GetAllPizzas
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PizzasViewModel'
+              example:
+                - name: string
+                  price: 0
+  '/pizzas/{name}':
+    get:
+      tags:
+        - PizzaOrderApi
+      summary: GetPizzaByName
+      operationId: GetPizzaByName
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PizzaViewModel'
+              example:
+                name: string
+                ingredients:
+                  - name: string
+                    price: 0
+components:
+  schemas:
+    IngredientViewModel:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: double
+      additionalProperties: false
+    PizzaViewModel:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngredientViewModel'
+          nullable: true
+      additionalProperties: false
+    PizzasViewModel:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: double
+      additionalProperties: false
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: [ ]
+  - apiKeyQuery: [ ]
