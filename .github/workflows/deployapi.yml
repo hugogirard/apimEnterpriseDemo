@@ -23,9 +23,7 @@ jobs:
         id: createResources
         uses: azure/arm-deploy@v1
         with:
-          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-          scope: subscription
-          region: ${{ secrets.LOCATION }}
+          resourceGroupName: ${{ env.RG_NAME }}                
           deploymentName:  ${{ github.run_id }}
           template: ./team/apiTeam/pizzaapi/pizza.api.bicep
           parameters: ApimServiceName=${{ secrets.APIM_PROD_NAME }} WebUrl=${{ secrets.PIZZA_API_URL }}        
